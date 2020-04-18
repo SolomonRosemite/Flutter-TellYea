@@ -1,6 +1,10 @@
+import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:tellyea/credentials.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -23,11 +27,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    Backendless.setUrl("https://api.backendless.com");
+    Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
+    super.initState();
+  }
+
   int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+    Backendless.data.of("test").save({
+      "context": "123"
     });
   }
 

@@ -1,0 +1,4 @@
+-dontwarn com.backendless.**  
+-dontwarn weborb.**  
+-keep class weborb.** {*;}
+-keep class com.backendless.** {*;}

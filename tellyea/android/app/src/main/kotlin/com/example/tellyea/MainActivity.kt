@@ -1,4 +1,4 @@
-package com.example.tellyea
+package com.Rosemite.tellyea
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
