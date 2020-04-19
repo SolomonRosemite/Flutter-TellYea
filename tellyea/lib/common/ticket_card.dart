@@ -18,11 +18,6 @@ class YeetCardWidget extends StatefulWidget {
 }
 
 class _YeetCardWidgetState extends State<YeetCardWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final YeetModel yeetModel;
 
   _YeetCardWidgetState({@required this.yeetModel});
@@ -67,21 +62,21 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child: Image.network(
-                                'https://karmafood.at/wp-content/uploads/2019/05/karma-food_new-brekkie-release.jpg',
-                                width: 70.0,
-                                height: 70.0,
-                                fit: BoxFit.fill,
+                                yeetModel.imageUrl,
+                                width: 60.0,
+                                height: 60.0,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 13.0),
-                        SizedBox(height: 13.0),
-                        SizedBox(height: 13.0),
-                        SizedBox(height: 13.0),
+                        SizedBox(height: 25.0),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: Text(DateFormat('HH:mm').format(yeetModel.dateTime)),
+                          child: Text(
+                            DateFormat('HH:mm').format(yeetModel.dateTime),
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),

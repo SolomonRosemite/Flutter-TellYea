@@ -18,17 +18,19 @@ class YeetListPage extends StatefulWidget {
 
 class YeetListPageState extends State<YeetListPage> {
   String timeString = "";
-  YeetModel yeetModel = YeetModel();
-
+  List<YeetModel> yeetModels = new List<YeetModel>();
   bool visible = false;
+
+  String teststr = "I Lost my Phone at the\nAirport!";
 
   @override
   void initState() {
-    yeetModel.id = '1';
-    yeetModel.displayname = "Jesse";
-    yeetModel.username = "JesseRosemite";
-    yeetModel.dateTime = DateTime.now();
-    yeetModel.message = "Hi, it's me Jesse";
+    yeetModels.add(new YeetModel(id: "0", dateTime: DateTime.now(), displayname: "James", username: "JamesFish", imageUrl: "https://m.media-amazon.com/images/I/81J+-QFsYuL._SS500_.jpg", message: "Finally back!"));
+    yeetModels.add(new YeetModel(id: "1", dateTime: DateTime.now(), displayname: "Alex", username: "Alex123", imageUrl: "https://tmssl.akamaized.net/images/portrait/originals/88103-1540568385.jpg", message: "I like Food"));
+    yeetModels.add(new YeetModel(id: "2", dateTime: DateTime.now(), displayname: "Jess", username: "JessRose", imageUrl: "https://www.bravo.de/assets/field/image/selena_gomez_liked_diese_pics_von_justin_bieber.jpg", message: teststr));
+    yeetModels.add(new YeetModel(id: "3", dateTime: DateTime.now(), displayname: "Amy", username: "JessRose", imageUrl: "https://images3.alphacoders.com/901/901746.jpg", message: "I Lost my Phone!"));
+
+    print(teststr.length);
 
     if (MyAppState.loadedSplashScreen == false) {
       Future.delayed(const Duration(milliseconds: 0), () {
@@ -50,7 +52,7 @@ class YeetListPageState extends State<YeetListPage> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('hh:mm').format(dateTime);
+    return DateFormat('HH:mm').format(dateTime);
   }
 
   @override
@@ -73,10 +75,10 @@ class YeetListPageState extends State<YeetListPage> {
           ),
           body: Container(
             child: ListView.builder(
-              itemCount: 5,
+              itemCount: yeetModels.length,
               padding: EdgeInsets.only(top: 20),
               itemBuilder: (context, index) {
-                return Hero(tag: index.toString(), child: YeetCardWidget(yeetModel: yeetModel));
+                return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
               },
             ),
           ),

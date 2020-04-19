@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class YeetLeftWidget extends StatelessWidget {
   final String displayname, username, message;
-
   YeetLeftWidget({@required this.displayname, @required this.username, @required this.message});
 
   @override
@@ -22,6 +21,7 @@ class YeetLeftWidget extends StatelessWidget {
         SizedBox(height: 10.0),
         Text(
           message,
+          textAlign: TextAlign.left,
           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.normal),
         ),
       ],
