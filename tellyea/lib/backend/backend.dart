@@ -1,5 +1,5 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:tellyea/credentials.dart';
+import 'package:tellyea/backend/credentials.dart';
 
 import 'dart:async';
 

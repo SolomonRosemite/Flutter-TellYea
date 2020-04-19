@@ -31,7 +31,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        MyApp.onPage = false;
+        MyAppState.onPage = false;
         return true;
       },
       child: Container(
@@ -42,9 +42,9 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: InkWell(
             onTap: () {
-              if (MyApp.onPage == false) {
+              if (MyAppState.onPage == false) {
                 Navigator.of(context).push(FadePageRoute(widget: TicketDetail(ticket: yeetModel)));
-                MyApp.onPage = true;
+                MyAppState.onPage = true;
               }
             },
             child: Container(

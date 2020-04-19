@@ -24,7 +24,10 @@ class TicketDetailState extends State<TicketDetail> with AfterLayoutMixin<Ticket
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: primaryColor,
+      ),
       body: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
