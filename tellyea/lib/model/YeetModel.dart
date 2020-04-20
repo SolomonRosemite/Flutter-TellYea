@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+
 class YeetModel {
-  String id;
-  String displayname;
-  String username;
-  String message;
-  String imageUrl;
+  YeetModel({this.id, @required this.displayname, @required this.username, @required this.message, @required this.imageUrl, @required this.dateTime, @required this.verified});
   DateTime dateTime;
-  YeetModel({this.id, this.displayname, this.username, this.message, this.imageUrl, this.dateTime});
+  String displayname;
+  String message;
+  String id;
+  String imageUrl;
+  String username;
+  bool verified;
 }

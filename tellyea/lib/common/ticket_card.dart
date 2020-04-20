@@ -1,12 +1,11 @@
-import 'package:tellyea/common/location_widget.dart';
+import 'package:tellyea/backend/SmallFunctions.dart';
 import 'package:tellyea/common/FadePageRoute.dart';
 import 'package:tellyea/pages/ticket_detail.dart';
 import 'package:tellyea/model/YeetModel.dart';
-import 'package:flutter/material.dart';
 import 'package:tellyea/common/theme.dart';
-
 import 'package:tellyea/main.dart';
-import 'package:intl/intl.dart';
+
+import 'package:flutter/material.dart';
 
 class YeetCardWidget extends StatefulWidget {
   final YeetModel yeetModel;
@@ -50,31 +49,90 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        Row(
+                        Column(
                           children: <Widget>[
-                            YeetLeftWidget(
-                              displayname: yeetModel.displayname,
-                              username: "@" + yeetModel.username,
-                              message: yeetModel.message,
+                            Row(
+                              children: <Widget>[
+                                Spacer(flex: 1),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              yeetModel.displayname.toUpperCase(),
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                            ),
+                                            yeetModel.verified
+                                                ? Image.network(
+                                                    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png",
+                                                    width: 12.0,
+                                                    height: 12.0,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : SizedBox.shrink(),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      "@" + yeetModel.username,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                                Spacer(flex: 98),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.network(
+                                    yeetModel.imageUrl,
+                                    width: 58.0,
+                                    height: 58.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Spacer(flex: 1),
+                              ],
                             ),
-                            Spacer(),
-                            Spacer(),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.network(
-                                yeetModel.imageUrl,
-                                width: 60.0,
-                                height: 60.0,
-                                fit: BoxFit.cover,
-                              ),
+                            // Column(
+                            //   children: <Widget>[
+                            //     Align(
+                            //       alignment: Alignment.centerLeft,
+                            //       child: Text(
+                            //         "@" + yeetModel.username,
+                            //         textAlign: TextAlign.left,
+                            //         style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.normal),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            Column(
+                              children: <Widget>[
+                                SizedBox(height: 2.0),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                    width: 260,
+                                    child: Text(
+                                      yeetModel.message,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        SizedBox(height: 25.0),
+                        SizedBox(height: 20.0),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Text(
-                            DateFormat('HH:mm').format(yeetModel.dateTime),
+                            SmallFunctions.formatFullDateTime(yeetModel.dateTime),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
