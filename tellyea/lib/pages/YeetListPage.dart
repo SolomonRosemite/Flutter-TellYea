@@ -1,6 +1,6 @@
 import 'package:tellyea/backend/SmallFunctions.dart';
-import 'package:tellyea/common/ticket_card.dart';
-import 'package:tellyea/backend/backend.dart';
+import 'package:tellyea/common/YeetCard.dart';
+import 'package:tellyea/backend/Backend.dart';
 import 'package:tellyea/model/YeetModel.dart';
 import 'package:tellyea/SplashScreen.dart';
 import 'package:tellyea/main.dart';
@@ -67,24 +67,47 @@ class YeetListPageState extends State<YeetListPage> {
       child: AnimatedOpacity(
         opacity: visible ? 1.0 : 0.0,
         duration: Duration(seconds: 1),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text(
-              timeString,
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            elevation: 10,
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
             backgroundColor: Colors.white,
-          ),
-          body: Container(
-            child: ListView.builder(
-              itemCount: yeetModels.length,
-              padding: EdgeInsets.only(top: 20),
-              itemBuilder: (context, index) {
-                return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
-              },
+            appBar: AppBar(
+              title: Text(
+                timeString,
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+              elevation: 10,
+              backgroundColor: Colors.white,
+            ),
+            body: TabBarView(
+              children: <Widget>[
+                new Container(
+                  child: ListView.builder(
+                    itemCount: yeetModels.length,
+                    padding: EdgeInsets.only(top: 20),
+                    itemBuilder: (context, index) {
+                      return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
+                    },
+                  ),
+                ),
+                new Container(),
+              ],
+            ),
+            bottomNavigationBar: new TabBar(
+              tabs: [
+                Tab(
+                  icon: new Icon(Icons.home),
+                ),
+                Tab(
+                  icon: new Icon(Icons.message),
+                )
+              ],
+              labelColor: Colors.red,
+              unselectedLabelColor: Colors.blue,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorPadding: EdgeInsets.all(5.0),
+              indicatorColor: Colors.blueGrey[700],
             ),
           ),
         ),

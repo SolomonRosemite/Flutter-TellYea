@@ -10,10 +10,7 @@ class FadePageRoute extends PageRouteBuilder {
           Animation<double> secondaryAnimation,
         ) {
           return widget;
-        }, transitionsBuilder: ((BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child) {
+        }, transitionsBuilder: ((BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
           return FadeTransition(
             opacity: Tween(begin: 0.0, end: 1.0).animate(animation),
             child: child,

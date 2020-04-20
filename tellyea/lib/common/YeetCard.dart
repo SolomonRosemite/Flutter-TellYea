@@ -1,6 +1,6 @@
 import 'package:tellyea/backend/SmallFunctions.dart';
 import 'package:tellyea/common/FadePageRoute.dart';
-import 'package:tellyea/pages/ticket_detail.dart';
+import 'package:tellyea/pages/YeetPage.dart';
 import 'package:tellyea/model/YeetModel.dart';
 import 'package:tellyea/common/theme.dart';
 import 'package:tellyea/main.dart';
@@ -37,7 +37,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
           child: InkWell(
             onTap: () {
               if (MyAppState.onPage == false) {
-                Navigator.of(context).push(FadePageRoute(widget: TicketDetail(ticket: yeetModel)));
+                Navigator.of(context).push(FadePageRoute(widget: YeetDetail(ticket: yeetModel)));
                 MyAppState.onPage = true;
               }
             },
@@ -98,18 +98,6 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                 Spacer(flex: 1),
                               ],
                             ),
-                            // Column(
-                            //   children: <Widget>[
-                            //     Align(
-                            //       alignment: Alignment.centerLeft,
-                            //       child: Text(
-                            //         "@" + yeetModel.username,
-                            //         textAlign: TextAlign.left,
-                            //         style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.normal),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                             Column(
                               children: <Widget>[
                                 SizedBox(height: 2.0),

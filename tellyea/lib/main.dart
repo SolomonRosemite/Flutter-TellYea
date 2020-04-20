@@ -1,4 +1,4 @@
-import 'package:tellyea/pages/PlaneTicketListPage.dart';
+import 'package:tellyea/pages/YeetListPage.dart';
 import 'package:tellyea/SplashScreen.dart';
 import 'package:flutter/material.dart';
 
