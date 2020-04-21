@@ -25,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   String alertMessage = "";
 
   void registerUser() async {
+    setState(() {
+      alertMessage = "";
+    });
     if (_loginButtonClick == true) {
       return;
     }
@@ -61,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     bool registeredSuccessfully = await Backend.registerUser(_username, _email, _password);
-    print(registeredSuccessfully);
 
     if (registeredSuccessfully == true) {
       saveToSharedPreferences();
@@ -72,11 +74,14 @@ class _LoginScreenState extends State<LoginScreen> {
     alertUser('Something went wrong. Try restarting the App');
 
     Backend.save('Reports', {
-      'context': 'Something went wrong here. File: login_screen Method: registerUser'
+      'context': 'Something went wrong here. File: login_screen Method: registerUser Username: $_username Email: $_email Password: $_password'
     });
   }
 
   void loginUser() async {
+    setState(() {
+      alertMessage = "";
+    });
     if (_loginButtonClick == true) {
       return;
     }
@@ -333,6 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void switchPage() {
     setState(() {
+      alertMessage = "";
       _showLogin = !_showLogin;
     });
   }
@@ -396,6 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Text(
                           alertMessage,
                           style: TextStyle(color: Colors.red),
+                          textAlign: TextAlign.center,
                         ),
                         _buildUsernameTF(),
                         _buildEmailTF(),
