@@ -48,7 +48,7 @@ class SplashState extends State<Splash> {
           setState(() {
             visible = false;
           });
-          Future.delayed(const Duration(seconds: 510), () {
+          Future.delayed(const Duration(milliseconds: 510), () {
             setState(() {
               image = "images/throw.png";
               visible = true;
@@ -96,6 +96,7 @@ class SplashState extends State<Splash> {
                 duration: Duration(seconds: 3),
                 child: Column(
                   children: <Widget>[
+                    // TODO: Add Inputfield here to set a displayname
                     RaisedButton(
                       onPressed: () {},
                       elevation: 0,

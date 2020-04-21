@@ -1,4 +1,5 @@
 import 'package:TellYea/pages/login/utilities/constants.dart';
+import 'package:TellYea/backend/Backend.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,11 +12,102 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+  String _username = "";
+  String _email = "";
+  String _password = "";
 
-  void loginUser() {
+  bool _loginButtonClick = false;
+
+  void registerUser() async {
     // TODO: Login User here if username (email) is correct and pop
     // If not tell the user
-    Navigator.pop(context);
+
+    // While We wait for the response we dont want so send another one.
+    // Thats why we retrun if we get another button click
+    if (_loginButtonClick == true) {
+      return;
+    }
+
+    //
+    _loginButtonClick = true;
+    _email = _email.trimRight();
+    _email = _email.trimLeft();
+
+    if (_username.length <= 3 && _username.length > 16) {
+      alertUser('Username must be at leas 4 to 16 characters long');
+      return;
+    }
+
+    if (_username.contains(' ')) {
+      alertUser('Username Can\'t contain White-Spaces');
+      return;
+    }
+
+    if (!_email.contains('@') || !_email.contains('.')) {
+      alertUser('Email is not valid');
+      return;
+    }
+
+    print(_username);
+    print(_email);
+    print(_password);
+
+    for (Map item in await Backend.readTable('TellYeaUsers')) {
+      if (_username.toLowerCase() == item['username'].toLowerCase()) {
+        alertUser('Username Already Exists');
+        return;
+      }
+    }
+
+    bool x = await Backend.registerUser(_username, _email, _password);
+    print(x);
+    _loginButtonClick = false;
+    // if (x) {
+    //   //  Navigator.pop(context);
+    //   return;
+    // }
+  }
+
+  // TODO: AlertUser Message
+  void alertUser(String context) {
+    // Here we Alert the user if something didn't go right.
+    // Example: Username is taken...
+    _loginButtonClick = false;
+    print(context);
+  }
+
+  Widget _buildUsernameTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Username',
+          style: kLabelStyle,
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            onChanged: (username) => this._username = username,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.email,
+                color: Colors.white,
+              ),
+              hintText: 'Enter a Username',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildEmailTF() {
@@ -32,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: TextField(
             keyboardType: TextInputType.emailAddress,
+            onChanged: (email) => this._email = email,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -67,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: TextField(
             obscureText: true,
+            onChanged: (password) => this._password = password,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -134,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => loginUser(),
+        onPressed: () => registerUser(),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -150,72 +244,6 @@ class _LoginScreenState extends State<LoginScreen> {
             fontFamily: 'OpenSans',
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSignInWithText() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '- OR -',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-            () => print('Login with Facebook'),
-            AssetImage(
-              'images/facebook.jpg',
-            ),
-          ),
-          _buildSocialBtn(
-            () => print('Login with Google'),
-            AssetImage(
-              'images/google.jpg',
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -304,14 +332,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(height: 30.0),
+                        _buildUsernameTF(),
                         _buildEmailTF(),
-                        // SizedBox(height: 30.0),
                         _buildPasswordTF(),
                         _buildForgotPasswordBtn(),
                         _buildRememberMeCheckbox(),
                         _buildLoginBtn(),
-                        _buildSignInWithText(),
-                        _buildSocialBtnRow(),
                         _buildSignupBtn(),
                       ],
                     ),

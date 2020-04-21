@@ -27,6 +27,28 @@ class Backend {
     return false;
   }
 
+  static Future<bool> registerUser(String username, String email, String password) async {
+    try {
+      BackendlessUser user = new BackendlessUser();
+      user.email = email;
+      user.password = password;
+      await Backendless.userService.register(user);
+      save('TellYeaUsers', {
+        'colorScheme': 'primaryColor',
+        'displayname': username,
+        'username': username
+      });
+      return true;
+    } catch (e) {
+      save("Reports", {
+        "context": e.toString()
+      });
+      return false;
+    }
+  }
+
+  static Future registerUserWithGoogle() {}
+
   static Future<void> loginUser(String username, String password) async {
     await Backendless.userService.login(username, password);
     userLoaded = true;
