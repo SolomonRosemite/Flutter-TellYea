@@ -47,11 +47,14 @@ class Backend {
     }
   }
 
-  static Future registerUserWithGoogle() {}
-
-  static Future<void> loginUser(String username, String password) async {
-    await Backendless.userService.login(username, password);
-    userLoaded = true;
+  static Future<bool> loginUser(String email, String password) async {
+    try {
+      await Backendless.userService.login(email, password);
+      userLoaded = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static Future<List<Map<dynamic, dynamic>>> readTable(String tableName) async {

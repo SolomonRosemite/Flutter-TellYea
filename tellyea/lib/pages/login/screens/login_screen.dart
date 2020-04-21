@@ -1,5 +1,7 @@
 import 'package:TellYea/pages/login/utilities/constants.dart';
+import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/backend/Backend.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,24 +13,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = false;
+  // User Data
   String _username = "";
   String _email = "";
   String _password = "";
 
+  // UI Stuff
   bool _loginButtonClick = false;
+  bool _showLogin = false;
+
+  String alertMessage = "";
 
   void registerUser() async {
-    // TODO: Login User here if username (email) is correct and pop
-    // If not tell the user
-
-    // While We wait for the response we dont want so send another one.
-    // Thats why we retrun if we get another button click
     if (_loginButtonClick == true) {
       return;
     }
 
-    //
     _loginButtonClick = true;
     _email = _email.trimRight();
     _email = _email.trimLeft();
@@ -48,35 +48,78 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    print(_username);
-    print(_email);
-    print(_password);
+    if (_password.isEmpty) {
+      alertUser('Please fill in a Password');
+      return;
+    }
 
     for (Map item in await Backend.readTable('TellYeaUsers')) {
       if (_username.toLowerCase() == item['username'].toLowerCase()) {
-        alertUser('Username Already Exists');
+        alertUser('Username is taken');
         return;
       }
     }
 
-    bool x = await Backend.registerUser(_username, _email, _password);
-    print(x);
-    _loginButtonClick = false;
-    // if (x) {
-    //   //  Navigator.pop(context);
-    //   return;
-    // }
+    bool registeredSuccessfully = await Backend.registerUser(_username, _email, _password);
+    print(registeredSuccessfully);
+
+    if (registeredSuccessfully == true) {
+      saveToSharedPreferences();
+      Navigator.pop(context);
+      return;
+    }
+
+    alertUser('Something went wrong. Try restarting the App');
+
+    Backend.save('Reports', {
+      'context': 'Something went wrong here. File: login_screen Method: registerUser'
+    });
   }
 
-  // TODO: AlertUser Message
+  void loginUser() async {
+    if (_loginButtonClick == true) {
+      return;
+    }
+
+    _loginButtonClick = true;
+    _email = _email.trimRight();
+    _email = _email.trimLeft();
+
+    if (!_email.contains('@') || !_email.contains('.')) {
+      alertUser('Email is not valid');
+      return;
+    }
+
+    if (_password.isEmpty) {
+      alertUser('Please fill in a Password');
+      return;
+    }
+
+    if (await Backend.loginUser(_email, _password) == true) {
+      saveToSharedPreferences();
+      return;
+    }
+    alertUser('Email or Password seems to be not right\nTry again');
+  }
+
+  void saveToSharedPreferences() {
+    MySharedPreferences.setString('email', _email);
+    MySharedPreferences.setString('password', _password);
+  }
+
   void alertUser(String context) {
     // Here we Alert the user if something didn't go right.
-    // Example: Username is taken...
+    // Example: Username is taken..
+    setState(() {
+      alertMessage = context;
+    });
     _loginButtonClick = false;
-    print(context);
   }
 
   Widget _buildUsernameTF() {
+    if (_showLogin) {
+      return SizedBox.shrink();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -114,6 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        SizedBox(height: 10.0),
         Text(
           'Email',
           style: kLabelStyle,
@@ -149,11 +193,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        SizedBox(height: 10.0),
         Text(
           'Password',
           style: kLabelStyle,
         ),
-        SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
@@ -181,48 +225,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
-          style: kLabelStyle,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value;
-                });
-              },
+  Widget _buildRegisterBtn() {
+    if (_showLogin) {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 25.0),
+        width: double.infinity,
+        child: RaisedButton(
+          elevation: 5.0,
+          onPressed: () => loginUser(),
+          padding: EdgeInsets.all(15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          color: Colors.white,
+          child: Text(
+            'Login'.toUpperCase(),
+            style: TextStyle(
+              color: Color(0xFF527DAA),
+              letterSpacing: 1.5,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'OpenSans',
             ),
           ),
-          Text(
-            'Remember me',
-            style: kLabelStyle,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLoginBtn() {
+        ),
+      );
+    }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
@@ -235,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         color: Colors.white,
         child: Text(
-          'LOGIN',
+          'Register'.toUpperCase(),
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -248,14 +276,41 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSignupBtn() {
+  Widget _buildLoginBtn() {
+    if (_showLogin) {
+      return GestureDetector(
+        onTap: () => switchPage(),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Want to Sign Up? ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              TextSpan(
+                text: 'Sign Up',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return GestureDetector(
-      onTap: () => print('Sign Up Button Pressed'),
+      onTap: () => switchPage(),
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Don\'t have an Account? ',
+              text: 'Want to Login? ',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -263,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             TextSpan(
-              text: 'Sign Up',
+              text: 'Login',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -274,6 +329,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void switchPage() {
+    setState(() {
+      _showLogin = !_showLogin;
+    });
   }
 
   @override
@@ -323,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'Sign In',
+                          _showLogin ? 'Login' : 'Sign Up',
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'OpenSans',
@@ -332,13 +393,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(height: 30.0),
+                        Text(
+                          alertMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
                         _buildUsernameTF(),
                         _buildEmailTF(),
                         _buildPasswordTF(),
-                        _buildForgotPasswordBtn(),
-                        _buildRememberMeCheckbox(),
+                        _buildRegisterBtn(),
                         _buildLoginBtn(),
-                        _buildSignupBtn(),
                       ],
                     ),
                   ),

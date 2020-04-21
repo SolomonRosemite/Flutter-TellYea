@@ -23,8 +23,8 @@ void loginUser() async {
   await MySharedPreferences.initialize();
 
   // If the user has already logged in before.
-  if (MySharedPreferences.getString('username') != null) {
-    Backend.loginUser(MySharedPreferences.getString('username'), MySharedPreferences.getString('password'));
+  if (MySharedPreferences.getString('email') != null) {
+    Backend.loginUser(MySharedPreferences.getString('email'), MySharedPreferences.getString('password'));
     return;
   }
   loadLoginScreen = true;
