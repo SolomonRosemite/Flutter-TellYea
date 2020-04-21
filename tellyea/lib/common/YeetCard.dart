@@ -1,9 +1,8 @@
-import 'package:tellyea/backend/SmallFunctions.dart';
-import 'package:tellyea/common/FadePageRoute.dart';
-import 'package:tellyea/pages/YeetPage.dart';
-import 'package:tellyea/model/YeetModel.dart';
-import 'package:tellyea/common/theme.dart';
-import 'package:tellyea/main.dart';
+import 'package:TellYea/backend/SmallFunctions.dart';
+import 'package:TellYea/common/FadePageRoute.dart';
+import 'package:TellYea/pages/YeetPage.dart';
+import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
 
@@ -31,13 +30,13 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Material(
-          color: primaryColor,
+          color: yeetModel.colorScheme,
           elevation: 20,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: InkWell(
             onTap: () {
               if (MyAppState.onPage == false) {
-                Navigator.of(context).push(FadePageRoute(widget: YeetDetail(ticket: yeetModel)));
+                Navigator.of(context).push(FadePageRoute(widget: YeetDetail(yeet: yeetModel)));
                 MyAppState.onPage = true;
               }
             },
@@ -66,6 +65,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                               textAlign: TextAlign.left,
                                               style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                                             ),
+                                            SizedBox(width: 3),
                                             yeetModel.verified
                                                 ? Image.network(
                                                     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png",
@@ -116,13 +116,48 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.0),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            SmallFunctions.formatFullDateTime(yeetModel.dateTime),
-                            style: TextStyle(color: Colors.white),
-                          ),
+                        // SizedBox(height: 30.0),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Spacer(flex: 1),
+                            // Buttons
+                            // ButtonTheme(
+                            //   minWidth: 10.0,
+                            //   height: 40.0,
+                            //   child: RaisedButton(
+                            //     color: Colors.transparent,
+                            //     elevation: 0,
+                            //     onPressed: () {},
+                            //     child: Row(
+                            //       children: <Widget>[
+                            //         Icon(
+                            //           // IconData(0xe84d, fontFamily: 'MyIcons'),
+                            //           Icons.ac_unit,
+                            //           color: Colors.white,
+                            //           size: 20,
+                            //         ),
+                            //         SizedBox(
+                            //           width: 4,
+                            //         ),
+                            //         Text(
+                            //           "2.300",
+                            //           style: TextStyle(color: Colors.white),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            Spacer(flex: 1000),
+                            Text(
+                              SmallFunctions.formatFullDateTime(yeetModel.dateTime),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Spacer(flex: 1),
+                          ],
                         ),
                       ],
                     ),

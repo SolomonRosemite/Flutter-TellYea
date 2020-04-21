@@ -1,15 +1,18 @@
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:tellyea/backend/credentials.dart';
+import 'package:TellYea/backend/credentials.dart';
 
 import 'dart:async';
 import 'dart:io';
 
 class Backend {
   static bool initialized = false;
+  static bool userLoaded = false;
+  static bool userIsOffline = false;
 
-  static void initialize() {
-    Backendless.setUrl("https://api.backendless.com");
+  static void initialize() async {
+    Backendless.setUrl('https://api.backendless.com');
     Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
+    initialized = true;
   }
 
   static Future<bool> hasInternet() async {
@@ -22,6 +25,11 @@ class Backend {
       return false;
     }
     return false;
+  }
+
+  static Future<void> loginUser(String username, String password) async {
+    await Backendless.userService.login(username, password);
+    userLoaded = true;
   }
 
   static Future<List<Map<dynamic, dynamic>>> readTable(String tableName) async {

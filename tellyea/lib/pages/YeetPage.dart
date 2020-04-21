@@ -1,41 +1,38 @@
-import 'package:tellyea/common/YeetCard.dart';
-import 'package:tellyea/model/YeetModel.dart';
-import 'package:tellyea/common/theme.dart';
+import 'package:TellYea/common/YeetCard.dart';
+import 'package:TellYea/model/YeetModel.dart';
 import 'package:flutter/material.dart';
 
 class YeetDetail extends StatefulWidget {
-  final YeetModel ticket;
+  final YeetModel yeet;
 
-  YeetDetail({@required this.ticket});
+  YeetDetail({@required this.yeet});
 
   @override
-  YeetDetailState createState() {
-    return new YeetDetailState();
-  }
+  YeetDetailState createState() => new YeetDetailState();
 }
 
 class YeetDetailState extends State<YeetDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: widget.yeet.colorScheme,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: primaryColor,
+        backgroundColor: widget.yeet.colorScheme,
       ),
       body: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
           Hero(
-            tag: widget.ticket.id,
-            child: YeetCardWidget(yeetModel: widget.ticket),
+            tag: widget.yeet.id,
+            child: YeetCardWidget(yeetModel: widget.yeet),
           ),
           Spacer(),
           SizedBox(height: 80.0),
-          Text(
-            "Context",
-            style: TextStyle(color: Colors.blue, fontSize: 40),
-          ),
+          // Text(
+          //   "Context",
+          //   style: TextStyle(color: Colors.blue, fontSize: 40),
+          // ),
         ],
       ),
     );

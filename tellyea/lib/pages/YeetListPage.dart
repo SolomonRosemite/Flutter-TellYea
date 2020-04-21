@@ -1,9 +1,9 @@
-import 'package:tellyea/backend/SmallFunctions.dart';
-import 'package:tellyea/common/YeetCard.dart';
-import 'package:tellyea/backend/Backend.dart';
-import 'package:tellyea/model/YeetModel.dart';
-import 'package:tellyea/SplashScreen.dart';
-import 'package:tellyea/main.dart';
+import 'package:TellYea/backend/SmallFunctions.dart';
+import 'package:TellYea/common/YeetCard.dart';
+import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/SplashScreen.dart';
+import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -45,30 +45,37 @@ class YeetListPageState extends State<YeetListPage> {
   }
 
   void loadMessages() async {
-    if (await Backend.hasInternet()) {
-      print("we are online");
+    // TODO: Here
+    if (await Backend.hasInternet() == false) return;
 
-      // Added all yeets
-      List<Map<dynamic, dynamic>> yeets = await Backend.readTable("Yeets");
-      yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
+    // Added all yeets
+    List<Map<dynamic, dynamic>> yeets = await Backend.readTable("Yeets");
+    yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
 
-      for (var i = 0; i < yeets.length; i++) {
-        yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"]));
+    for (var i = 0; i < yeets.length; i++) {
+      Color colorScheme;
+      switch (yeets[i]["colorScheme"]) {
+        case "primaryColor":
+          colorScheme = ColorSchemes.primaryColor;
+          break;
+        case "red":
+          colorScheme = ColorSchemes.red;
+          break;
       }
-      return;
+      yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
     }
-    print("we are offline");
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor,
+      color: ColorSchemes.primaryColor,
       child: AnimatedOpacity(
         opacity: visible ? 1.0 : 0.0,
         duration: Duration(seconds: 1),
         child: DefaultTabController(
-          length: 2,
+          initialIndex: 1,
+          length: 3,
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -82,6 +89,16 @@ class YeetListPageState extends State<YeetListPage> {
             ),
             body: TabBarView(
               children: <Widget>[
+                // Page View 1: Profile
+                new Container(
+                  child: Center(
+                    // TODO: Create a User login
+                    // TODO: Create a User Class
+                    // TODO: Work the User Page
+                    child: Text("Profile"),
+                  ),
+                ),
+                // Page View 2: Main YeetList
                 new Container(
                   child: ListView.builder(
                     itemCount: yeetModels.length,
@@ -91,11 +108,19 @@ class YeetListPageState extends State<YeetListPage> {
                     },
                   ),
                 ),
-                new Container(),
+                // Page View 3: Direct Message and Friends
+                new Container(
+                  child: Center(
+                    child: Text("Direct Message and Friends"),
+                  ),
+                ),
               ],
             ),
             bottomNavigationBar: new TabBar(
               tabs: [
+                Tab(
+                  icon: new Icon(Icons.home),
+                ),
                 Tab(
                   icon: new Icon(Icons.home),
                 ),
