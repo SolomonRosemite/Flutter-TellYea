@@ -102,6 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (await Backend.loginUser(_email, _password) == true) {
       saveToSharedPreferences();
+      Navigator.pop(context);
       return;
     }
     alertUser('Email or Password seems to be not right\nTry again');

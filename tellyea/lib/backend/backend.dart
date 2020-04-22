@@ -1,8 +1,8 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
 
 import 'dart:async';
-import 'dart:io';
 
 class Backend {
   static bool initialized = false;
@@ -16,15 +16,7 @@ class Backend {
   }
 
   static Future<bool> hasInternet() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-    } on SocketException catch (_) {
-      return false;
-    }
-    return false;
+    return await DataConnectionChecker().hasConnection;
   }
 
   static Future<bool> registerUser(String username, String email, String password) async {
