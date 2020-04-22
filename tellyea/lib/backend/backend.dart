@@ -1,4 +1,3 @@
-import 'package:TellYea/common/theme.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
@@ -55,7 +54,9 @@ class Backend {
         Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
         ThisUser.loadData(colorScheme: user['colorScheme'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
       } catch (e) {
-        // TODO: Add a error Report here.
+        save("Reports", {
+          "context": e.toString()
+        });
       }
 
       userLoaded = true;
@@ -84,6 +85,12 @@ class Backend {
     if (initialized == false) initialize();
 
     Backendless.data.of(tableName).save(map);
+  }
+
+  static Future<void> saveAwait(String tableName, Map<String, dynamic> map) async {
+    if (initialized == false) initialize();
+
+    await Backendless.data.of(tableName).save(map);
   }
 
   static EventHandler<Map<dynamic, dynamic>> initListener(String tableName) {

@@ -13,12 +13,18 @@ class PostYeet extends StatefulWidget {
 }
 
 class _PostYeetState extends State<PostYeet> {
+  // UI
   Color selectedColor = ColorSchemes.primaryColor;
+  Color buttonEnabled = Colors.grey;
 
   String message = "";
 
-  void test() async {
-    Backend.save('Yeets', {
+  void postYeet() async {
+    if (message.isEmpty) {
+      return;
+    }
+
+    await Backend.saveAwait('Yeets', {
       'displayname': ThisUser.displayname,
       'colorScheme': ThisUser.colorScheme,
       'username': ThisUser.username,
@@ -27,6 +33,8 @@ class _PostYeetState extends State<PostYeet> {
       'dateTime': DateTime.now().toString(),
       'verified': ThisUser.verified,
     });
+
+    Navigator.of(context).pop(null);
   }
 
   @override
@@ -38,9 +46,11 @@ class _PostYeetState extends State<PostYeet> {
         iconTheme: IconThemeData(color: Colors.white),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.send),
-            //TODO: Send and pop. Disable button if context is empty
-            onPressed: () => test(),
+            icon: new Icon(
+              Icons.send,
+              color: buttonEnabled,
+            ),
+            onPressed: () => postYeet(),
           ),
         ],
         leading: new IconButton(
@@ -51,19 +61,30 @@ class _PostYeetState extends State<PostYeet> {
       ),
       body: Container(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(8.0),
               child: TextField(
                 maxLines: 10,
                 textInputAction: TextInputAction.newline,
-                onChanged: (message) => this.message = message,
+                style: TextStyle(color: Colors.white),
+                onChanged: (message) {
+                  this.message = message;
+                  if (message.isEmpty) {
+                    setState(() {
+                      buttonEnabled = Colors.grey;
+                    });
+                    return;
+                  }
+
+                  setState(() {
+                    buttonEnabled = Colors.white;
+                  });
+                },
                 decoration: InputDecoration(
-                  hintText: "Comment!",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 0.0),
-                  ),
+                  hintStyle: TextStyle(color: Colors.white),
+                  hintText: "Post Yeet!",
+                  border: OutlineInputBorder(),
                   focusColor: Colors.white,
                 ),
               ),
