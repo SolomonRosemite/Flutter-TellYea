@@ -1,3 +1,4 @@
+import 'package:TellYea/common/theme.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
@@ -32,6 +33,7 @@ class Backend {
         'displayname': displayName,
         'username': username
       });
+      ThisUser.loadData(colorScheme: 'primaryColor', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/4F028E3C-EEA0-F35B-FFBE-D51E504E9F00/CC5F4B2E-21DE-4663-8967-C01F658DC955/files/images/profile_images/default.png', username: username, verified: false);
       return true;
     } catch (e) {
       save("Reports", {

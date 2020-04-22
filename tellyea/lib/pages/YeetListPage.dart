@@ -18,8 +18,11 @@ class YeetListPage extends StatefulWidget {
 }
 
 class YeetListPageState extends State<YeetListPage> {
-  String timeString = "";
   List<YeetModel> yeetModels = new List<YeetModel>();
+  List<Map<dynamic, dynamic>> yeets = new List();
+  int i = 0;
+
+  String timeString = "";
   bool visible = false;
 
   @override
@@ -30,6 +33,8 @@ class YeetListPageState extends State<YeetListPage> {
         visible = true;
       });
     }
+    var listener = Backend.initListener('Yeets');
+    listener.addCreateListener(addMessages);
 
     loadMessages();
 
@@ -46,11 +51,27 @@ class YeetListPageState extends State<YeetListPage> {
     });
   }
 
+  void addMessages(Map map) {
+    i++;
+    Color colorScheme;
+    switch (map["colorScheme"]) {
+      case "primaryColor":
+        colorScheme = ColorSchemes.primaryColor;
+        break;
+      case "red":
+        colorScheme = ColorSchemes.red;
+        break;
+    }
+    setState(() {
+      yeetModels.insert(0, new YeetModel(id: i.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
+    });
+  }
+
   void loadMessages() async {
     if (await Backend.hasInternet() == false) return;
 
     // Added all yeets
-    List<Map<dynamic, dynamic>> yeets = await Backend.readTable("Yeets");
+    yeets = await Backend.readTable("Yeets");
     yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
 
     for (var i = 0; i < yeets.length; i++) {
@@ -64,6 +85,7 @@ class YeetListPageState extends State<YeetListPage> {
           break;
       }
       yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
+      this.i = i;
     }
   }
 
