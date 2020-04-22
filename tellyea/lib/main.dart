@@ -1,6 +1,7 @@
 import 'package:TellYea/pages/login/screens/login_screen.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
+import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/SplashScreen.dart';
 
@@ -44,6 +45,7 @@ class MyAppState extends State<MyApp> {
     var routes = <String, WidgetBuilder>{
       Splash.routeName: (BuildContext context) => new Splash(),
       LoginScreen.routeName: (BuildContext context) => new LoginScreen(),
+      PostYeet.routeName: (BuildContext context) => new PostYeet(),
     };
     return MaterialApp(
       title: 'TellYea',

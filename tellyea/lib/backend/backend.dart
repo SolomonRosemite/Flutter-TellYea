@@ -1,6 +1,7 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
+import 'package:TellYea/backend/ThisUser.dart';
 
 import 'dart:async';
 
@@ -15,11 +16,11 @@ class Backend {
     initialized = true;
   }
 
-  static Future<bool> hasInternet() async {
-    return await DataConnectionChecker().hasConnection;
-  }
+  static Future<bool> hasInternet() async => await DataConnectionChecker().hasConnection;
 
-  static Future<bool> registerUser(String username, String email, String password) async {
+  static Future<bool> registerUser(String displayName, String username, String email, String password) async {
+    if (initialized == false) initialize();
+
     try {
       BackendlessUser user = new BackendlessUser();
       user.email = email;
@@ -27,7 +28,8 @@ class Backend {
       await Backendless.userService.register(user);
       save('TellYeaUsers', {
         'colorScheme': 'primaryColor',
-        'displayname': username,
+        'email': email,
+        'displayname': displayName,
         'username': username
       });
       return true;
@@ -40,11 +42,23 @@ class Backend {
   }
 
   static Future<bool> loginUser(String email, String password) async {
+    if (initialized == false) initialize();
+
     try {
       await Backendless.userService.login(email, password);
+
+      // Load User
+      try {
+        DataQueryBuilder queryBuilder = DataQueryBuilder()..whereClause = 'email = \'$email\'';
+        Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
+        ThisUser.loadData(colorScheme: user['colorScheme'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
+      } catch (e) {
+        // TODO: Add a error Report here.
+      }
+
       userLoaded = true;
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }

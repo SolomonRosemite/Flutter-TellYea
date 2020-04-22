@@ -1,6 +1,6 @@
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/common/FadePageRoute.dart';
-import 'package:TellYea/pages/YeetPage.dart';
+import 'package:TellYea/pages/ViewYeetPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/main.dart';
 

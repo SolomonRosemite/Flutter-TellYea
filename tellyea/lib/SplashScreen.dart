@@ -96,7 +96,6 @@ class SplashState extends State<Splash> {
                 duration: Duration(seconds: 3),
                 child: Column(
                   children: <Widget>[
-                    // TODO: Add Inputfield here to set a displayname
                     RaisedButton(
                       onPressed: () {},
                       elevation: 0,

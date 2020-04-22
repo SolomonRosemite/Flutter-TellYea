@@ -5,6 +5,8 @@ import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/main.dart';
 
+import 'package:TellYea/pages/PostYeetPage.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -45,7 +47,6 @@ class YeetListPageState extends State<YeetListPage> {
   }
 
   void loadMessages() async {
-    // TODO: Here
     if (await Backend.hasInternet() == false) return;
 
     // Added all yeets
@@ -92,9 +93,7 @@ class YeetListPageState extends State<YeetListPage> {
                 // Page View 1: Profile
                 new Container(
                   child: Center(
-                    // TODO: Create a User login
-                    // TODO: Create a User Class
-                    // TODO: Work the User Page
+                    // TODO: Work the Profile Page
                     child: Text("Profile"),
                   ),
                 ),
@@ -119,7 +118,7 @@ class YeetListPageState extends State<YeetListPage> {
             bottomNavigationBar: new TabBar(
               tabs: [
                 Tab(
-                  icon: new Icon(Icons.home),
+                  icon: new Icon(Icons.account_box),
                 ),
                 Tab(
                   icon: new Icon(Icons.home),
@@ -133,6 +132,12 @@ class YeetListPageState extends State<YeetListPage> {
               indicatorSize: TabBarIndicatorSize.label,
               indicatorPadding: EdgeInsets.all(5.0),
               indicatorColor: Colors.blueGrey[700],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, PostYeet.routeName);
+              },
+              child: Icon(Icons.ac_unit),
             ),
           ),
         ),

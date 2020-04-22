@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // User Data
+  String _displayName = "";
   String _username = "";
   String _email = "";
   String _password = "";
@@ -33,8 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     _loginButtonClick = true;
+    _email = _email.toLowerCase();
     _email = _email.trimRight();
     _email = _email.trimLeft();
+
+    if (_displayName.length <= 3 && _displayName.length > 16) {
+      alertUser('DisplayName must be at leas 4 to 16 characters long');
+      return;
+    }
 
     if (_username.length <= 3 && _username.length > 16) {
       alertUser('Username must be at leas 4 to 16 characters long');
@@ -63,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
 
-    bool registeredSuccessfully = await Backend.registerUser(_username, _email, _password);
+    bool registeredSuccessfully = await Backend.registerUser(_displayName, _username, _email, _password);
 
     if (registeredSuccessfully == true) {
       saveToSharedPreferences();
@@ -87,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     _loginButtonClick = true;
+    _email = _email.toLowerCase();
     _email = _email.trimRight();
     _email = _email.trimLeft();
 
@@ -122,6 +130,43 @@ class _LoginScreenState extends State<LoginScreen> {
     _loginButtonClick = false;
   }
 
+  Widget _buildNameTF() {
+    if (_showLogin) {
+      return SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Name',
+          style: kLabelStyle,
+        ),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            onChanged: (displayName) => this._displayName = displayName,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.person_pin_circle,
+                color: Colors.white,
+              ),
+              hintText: 'Enter your Name',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildUsernameTF() {
     if (_showLogin) {
       return SizedBox.shrink();
@@ -147,10 +192,10 @@ class _LoginScreenState extends State<LoginScreen> {
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.email,
+                Icons.account_circle,
                 color: Colors.white,
               ),
-              hintText: 'Enter a Username',
+              hintText: 'Enter your Username',
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -405,6 +450,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
+                        _buildNameTF(),
                         _buildUsernameTF(),
                         _buildEmailTF(),
                         _buildPasswordTF(),
