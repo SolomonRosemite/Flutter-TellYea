@@ -4,7 +4,6 @@ class MySharedPreferences {
   static SharedPreferences prefs;
   static Future<void> initialize() async {
     prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
   }
 
   static String getString(String key) => prefs.getString(key);

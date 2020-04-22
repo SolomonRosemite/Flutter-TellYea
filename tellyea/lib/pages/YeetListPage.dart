@@ -20,7 +20,7 @@ class YeetListPage extends StatefulWidget {
 class YeetListPageState extends State<YeetListPage> {
   List<YeetModel> yeetModels = new List<YeetModel>();
   List<Map<dynamic, dynamic>> yeets = new List();
-  int i = 0;
+  int index = 0;
 
   String timeString = "";
   bool visible = false;
@@ -52,7 +52,7 @@ class YeetListPageState extends State<YeetListPage> {
   }
 
   void addMessages(Map map) {
-    i++;
+    index += 1;
     Color colorScheme;
     switch (map["colorScheme"]) {
       case "primaryColor":
@@ -62,8 +62,9 @@ class YeetListPageState extends State<YeetListPage> {
         colorScheme = ColorSchemes.red;
         break;
     }
+
     setState(() {
-      yeetModels.insert(0, new YeetModel(id: i.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
+      yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
     });
   }
 
@@ -85,7 +86,7 @@ class YeetListPageState extends State<YeetListPage> {
           break;
       }
       yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
-      this.i = i;
+      this.index = i;
     }
   }
 

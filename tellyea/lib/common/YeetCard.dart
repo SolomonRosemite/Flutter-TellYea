@@ -12,14 +12,10 @@ class YeetCardWidget extends StatefulWidget {
   YeetCardWidget({@required this.yeetModel});
 
   @override
-  _YeetCardWidgetState createState() => _YeetCardWidgetState(yeetModel: yeetModel);
+  _YeetCardWidgetState createState() => _YeetCardWidgetState();
 }
 
 class _YeetCardWidgetState extends State<YeetCardWidget> {
-  final YeetModel yeetModel;
-
-  _YeetCardWidgetState({@required this.yeetModel});
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -30,13 +26,13 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Material(
-          color: yeetModel.colorScheme,
+          color: widget.yeetModel.colorScheme,
           elevation: 20,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: InkWell(
             onTap: () {
               if (MyAppState.onPage == false) {
-                Navigator.of(context).push(FadePageRoute(widget: YeetDetail(yeet: yeetModel)));
+                Navigator.of(context).push(FadePageRoute(widget: YeetDetail(yeet: widget.yeetModel)));
                 MyAppState.onPage = true;
               }
             },
@@ -61,12 +57,12 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                         Row(
                                           children: <Widget>[
                                             Text(
-                                              yeetModel.displayname.toUpperCase(),
+                                              widget.yeetModel.displayname.toUpperCase(),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                                             ),
                                             SizedBox(width: 3),
-                                            yeetModel.verified
+                                            widget.yeetModel.verified
                                                 ? Image.network(
                                                     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png",
                                                     width: 12.0,
@@ -79,7 +75,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                       ],
                                     ),
                                     Text(
-                                      "@" + yeetModel.username,
+                                      "@" + widget.yeetModel.username,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.normal),
                                     ),
@@ -89,7 +85,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),
                                   child: Image.network(
-                                    yeetModel.imageUrl,
+                                    widget.yeetModel.imageUrl,
                                     width: 58.0,
                                     height: 58.0,
                                     fit: BoxFit.cover,
@@ -106,7 +102,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                   child: SizedBox(
                                     width: 260,
                                     child: Text(
-                                      yeetModel.message,
+                                      widget.yeetModel.message,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
                                     ),
@@ -153,7 +149,7 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                             // ),
                             Spacer(flex: 1000),
                             Text(
-                              SmallFunctions.formatFullDateTime(yeetModel.dateTime),
+                              SmallFunctions.formatFullDateTime(widget.yeetModel.dateTime),
                               style: TextStyle(color: Colors.white),
                             ),
                             Spacer(flex: 1),
