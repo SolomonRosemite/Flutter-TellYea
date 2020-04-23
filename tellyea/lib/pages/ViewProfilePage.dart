@@ -1,15 +1,14 @@
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/model/Profile.dart';
 import 'package:flutter/material.dart';
-import 'package:TellYea/common/YeetCard.dart';
 
 import 'package:TellYea/common/theme.dart';
 
 class ProfilePage extends StatefulWidget {
   final Profile profile;
-
   ProfilePage({this.profile});
 
   @override
@@ -23,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     if (widget.profile == null) {
-      profile = new Profile(displayname: ThisUser.displayname, colorScheme: ColorSchemes.colorSchemesToColor(ThisUser.colorScheme), username: ThisUser.username, imageUrl: ThisUser.imageUrl, verified: ThisUser.verified);
+      profile = new Profile(displayname: ThisUser.displayname, bio: ThisUser.bio, colorScheme: ColorSchemes.colorSchemesToColor(ThisUser.colorScheme), username: ThisUser.username, imageUrl: ThisUser.imageUrl, verified: ThisUser.verified);
       loadYeets();
       return;
     }
@@ -53,47 +52,73 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
             child: Row(
               children: <Widget>[
-                Spacer(flex: 5),
-                Text(
-                  profile.displayname,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      profile.displayname,
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
-                Spacer(flex: 100),
+                IconButton(
+                  icon: Icon(MdiIcons.accountMultiplePlus),
+                  onPressed: () {
+                    print('test');
+                  },
+                ),
                 IconButton(
                   icon: Icon(Icons.message),
                   onPressed: () {
                     print('test');
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.contacts), // TODO: Add more IconButtons ( Add Friend, Follow )
-                  onPressed: () {
-                    print('test');
-                  },
-                ),
-                Spacer(flex: 1),
+                SizedBox(width: 5),
               ],
             ),
           ),
           SizedBox(height: 20),
           Row(
             children: <Widget>[
-              Spacer(flex: 15),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Image.network(
-                  'https://m.media-amazon.com/images/I/81J+-QFsYuL._SS500_.jpg',
-                  width: 90.0,
-                  height: 90.0,
-                  fit: BoxFit.cover,
+              SizedBox(width: 15),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.network(
+                      'https://m.media-amazon.com/images/I/81J+-QFsYuL._SS500_.jpg',
+                      width: 90.0,
+                      height: 90.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-              Spacer(flex: 100),
-              Text(
-                'User Since 2020',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        yeetModels.length.toString(),
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                      Text(
+                        'Total Yeets',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'User Since 2020',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              Spacer(flex: 25),
+              SizedBox(width: 30),
             ],
           ),
           SizedBox(height: 20),
@@ -132,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 80,
                       width: 180,
                       child: Text(
-                        "Bio",
+                        profile.bio,
                         style: TextStyle(
                           color: Colors.white,
                         ),

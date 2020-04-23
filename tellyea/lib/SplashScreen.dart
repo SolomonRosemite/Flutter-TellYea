@@ -130,13 +130,17 @@ class SplashState extends State<Splash> {
               AnimatedOpacity(
                 opacity: offlineImageVisible ? 1.0 : 0.0,
                 duration: Duration(milliseconds: 500),
-                child: Container(
-                  height: 70,
-                  width: 70,
-                  child: Image(
-                    image: AssetImage(offlineImage),
-                    color: Colors.white,
-                  ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 70,
+                      width: 70,
+                      child: Image(
+                        image: AssetImage(offlineImage),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

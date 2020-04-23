@@ -16,7 +16,9 @@ class Backend {
     initialized = true;
   }
 
-  static Future<bool> hasInternet() async => await DataConnectionChecker().hasConnection;
+  static Future<bool> hasInternet() async {
+    return await DataConnectionChecker().hasConnection;
+  }
 
   static Future<bool> registerUser(String displayName, String username, String email, String password) async {
     if (initialized == false) initialize();
@@ -32,7 +34,7 @@ class Backend {
         'displayname': displayName,
         'username': username
       });
-      ThisUser.loadData(colorScheme: 'primaryColor', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/4F028E3C-EEA0-F35B-FFBE-D51E504E9F00/CC5F4B2E-21DE-4663-8967-C01F658DC955/files/images/profile_images/default.png', username: username, verified: false);
+      ThisUser.loadData(colorScheme: 'primaryColor', bio: 'Hey, I\'m using TellYea', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
       return true;
     } catch (e) {
       save("Reports", {
@@ -52,7 +54,7 @@ class Backend {
       try {
         DataQueryBuilder queryBuilder = DataQueryBuilder()..whereClause = 'email = \'$email\'';
         Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
-        ThisUser.loadData(colorScheme: user['colorScheme'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
+        ThisUser.loadData(colorScheme: user['colorScheme'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
       } catch (e) {
         save("Reports", {
           "context": e.toString()

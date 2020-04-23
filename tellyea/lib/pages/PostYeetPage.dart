@@ -40,9 +40,9 @@ class _PostYeetState extends State<PostYeet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: selectedColor,
+      backgroundColor: ColorSchemes.colorSchemesToColor(ThisUser.colorScheme),
       appBar: AppBar(
-        backgroundColor: selectedColor,
+        backgroundColor: ColorSchemes.colorSchemesToColor(ThisUser.colorScheme),
         iconTheme: IconThemeData(color: Colors.white),
         actions: <Widget>[
           new IconButton(
@@ -83,7 +83,7 @@ class _PostYeetState extends State<PostYeet> {
                 },
                 decoration: InputDecoration(
                   hintStyle: TextStyle(color: Colors.white),
-                  hintText: "Post Yeet!",
+                  hintText: "Post a Yeet!",
                   border: OutlineInputBorder(),
                   focusColor: Colors.white,
                 ),

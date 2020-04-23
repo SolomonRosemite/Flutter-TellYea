@@ -4,6 +4,7 @@ import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/model/Profile.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/main.dart';
 
@@ -21,13 +22,16 @@ class YeetListPage extends StatefulWidget {
   YeetListPageState createState() => YeetListPageState();
 }
 
-class YeetListPageState extends State<YeetListPage> {
+class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixin {
   List<YeetModel> yeetModels = new List<YeetModel>();
   List<Map<dynamic, dynamic>> yeets = new List();
   int index = 0;
 
   String timeString = "";
   bool visible = false;
+
+  static TabController tabController;
+  static Profile profile;
 
   @override
   void initState() {
@@ -39,6 +43,8 @@ class YeetListPageState extends State<YeetListPage> {
     }
     var listener = Backend.initListener('Yeets');
     listener.addCreateListener(addMessages);
+
+    tabController = new TabController(vsync: this, length: 3);
 
     loadMessages();
 
@@ -69,8 +75,20 @@ class YeetListPageState extends State<YeetListPage> {
 
     setState(() {
       yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
-      Yeets.yeetModels = this.yeetModels;
     });
+    print('good2');
+    print('good2');
+    print('good2');
+    print('good2');
+    print('good2');
+    print('good2');
+    tabController.animateTo(0);
+    print('good');
+    print('good');
+    print('good');
+    print('good');
+    print('good');
+    Yeets.yeetModels = this.yeetModels;
   }
 
   void loadMessages() async {
@@ -120,6 +138,7 @@ class YeetListPageState extends State<YeetListPage> {
               backgroundColor: Colors.white,
             ),
             body: TabBarView(
+              // controller: tabController,
               children: <Widget>[
                 // Page View 1: Profile
                 new Container(
@@ -131,7 +150,7 @@ class YeetListPageState extends State<YeetListPage> {
                     // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
 
                     // TODO: Redesign 'Post YeetPage'
-                    child: ProfilePage(),
+                    child: ProfilePage(profile: profile),
                   ),
                 ),
                 // Page View 2: Main YeetList
