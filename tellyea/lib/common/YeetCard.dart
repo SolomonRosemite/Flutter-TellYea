@@ -112,7 +112,6 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                             ),
                           ],
                         ),
-                        // SizedBox(height: 30.0),
                         SizedBox(height: 10.0),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -120,33 +119,6 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Spacer(flex: 1),
-                            // Buttons
-                            // ButtonTheme(
-                            //   minWidth: 10.0,
-                            //   height: 40.0,
-                            //   child: RaisedButton(
-                            //     color: Colors.transparent,
-                            //     elevation: 0,
-                            //     onPressed: () {},
-                            //     child: Row(
-                            //       children: <Widget>[
-                            //         Icon(
-                            //           // IconData(0xe84d, fontFamily: 'MyIcons'),
-                            //           Icons.ac_unit,
-                            //           color: Colors.white,
-                            //           size: 20,
-                            //         ),
-                            //         SizedBox(
-                            //           width: 4,
-                            //         ),
-                            //         Text(
-                            //           "2.300",
-                            //           style: TextStyle(color: Colors.white),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ),
                             Spacer(flex: 1000),
                             Text(
                               SmallFunctions.formatFullDateTime(widget.yeetModel.dateTime),

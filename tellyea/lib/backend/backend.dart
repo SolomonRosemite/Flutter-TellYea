@@ -1,7 +1,7 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
-import 'package:TellYea/backend/ThisUser.dart';
+import 'package:TellYea/model/ThisUser.dart';
 
 import 'dart:async';
 

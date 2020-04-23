@@ -1,16 +1,20 @@
 import 'package:TellYea/backend/SmallFunctions.dart';
+import 'package:TellYea/pages/ViewProfilePage.dart';
+import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/main.dart';
 
-import 'package:TellYea/pages/PostYeetPage.dart';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import '../common/theme.dart';
+
+class Yeets {
+  static List<YeetModel> yeetModels = new List<YeetModel>();
+}
 
 class YeetListPage extends StatefulWidget {
   @override
@@ -65,6 +69,7 @@ class YeetListPageState extends State<YeetListPage> {
 
     setState(() {
       yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
+      Yeets.yeetModels = this.yeetModels;
     });
   }
 
@@ -76,18 +81,11 @@ class YeetListPageState extends State<YeetListPage> {
     yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
 
     for (var i = 0; i < yeets.length; i++) {
-      Color colorScheme;
-      switch (yeets[i]["colorScheme"]) {
-        case "primaryColor":
-          colorScheme = ColorSchemes.primaryColor;
-          break;
-        case "red":
-          colorScheme = ColorSchemes.red;
-          break;
-      }
+      Color colorScheme = ColorSchemes.colorSchemesToColor(yeets[i]["colorScheme"]);
       yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
       this.index = i;
     }
+    Yeets.yeetModels = this.yeetModels;
   }
 
   @override
@@ -103,12 +101,22 @@ class YeetListPageState extends State<YeetListPage> {
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.settings,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {}),
+              ],
               title: Text(
                 timeString,
                 style: TextStyle(color: Colors.black),
               ),
               centerTitle: true,
-              elevation: 10,
+              elevation: 0,
+              // elevation: 10,
               backgroundColor: Colors.white,
             ),
             body: TabBarView(
@@ -117,7 +125,13 @@ class YeetListPageState extends State<YeetListPage> {
                 new Container(
                   child: Center(
                     // TODO: Work the Profile Page
-                    child: Text("Profile"),
+
+                    // TODO: Helpful links for Later 'Images' to downscale...
+                    // https://pub.dev/packages/image_picker
+                    // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
+
+                    // TODO: Redesign 'Post YeetPage'
+                    child: ProfilePage(),
                   ),
                 ),
                 // Page View 2: Main YeetList
@@ -160,7 +174,7 @@ class YeetListPageState extends State<YeetListPage> {
               onPressed: () {
                 Navigator.pushNamed(context, PostYeet.routeName);
               },
-              child: Icon(Icons.ac_unit),
+              child: Icon(Icons.message),
             ),
           ),
         ),

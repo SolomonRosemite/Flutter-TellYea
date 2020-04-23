@@ -2,7 +2,7 @@ import 'package:TellYea/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:TellYea/backend/ThisUser.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/backend/Backend.dart';
 
 class PostYeet extends StatefulWidget {
