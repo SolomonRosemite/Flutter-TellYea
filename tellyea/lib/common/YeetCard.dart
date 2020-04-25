@@ -1,4 +1,6 @@
 import 'package:TellYea/backend/SmallFunctions.dart';
+import 'package:TellYea/model/Profile.dart';
+import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/common/FadePageRoute.dart';
 import 'package:TellYea/pages/ViewYeetPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
@@ -16,6 +18,10 @@ class YeetCardWidget extends StatefulWidget {
 }
 
 class _YeetCardWidgetState extends State<YeetCardWidget> {
+  Profile loadProfile() {
+    return new Profile(bio: widget.yeetModel.bio, colorScheme: widget.yeetModel.colorScheme, displayname: widget.yeetModel.displayname, imageUrl: widget.yeetModel.imageUrl, username: widget.yeetModel.username, verified: widget.yeetModel.verified);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -82,13 +88,17 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                   ],
                                 ),
                                 Spacer(flex: 98),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: Image.network(
-                                    widget.yeetModel.imageUrl,
-                                    width: 58.0,
-                                    height: 58.0,
-                                    fit: BoxFit.cover,
+                                GestureDetector(
+                                  onTapDown: (_) => Navigator.pushNamed(context, ProfilePage.routeName, arguments: loadProfile()),
+                                  child: ClipRRect(
+                                    // TODO: If user clicks Profile pic. nav to that user.
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: Image.network(
+                                      widget.yeetModel.imageUrl,
+                                      width: 58.0,
+                                      height: 58.0,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 Spacer(flex: 1),

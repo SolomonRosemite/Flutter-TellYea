@@ -1,15 +1,19 @@
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
-import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/common/YeetCard.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/model/Profile.dart';
-import 'package:flutter/material.dart';
-
 import 'package:TellYea/common/theme.dart';
+
+import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   final Profile profile;
   ProfilePage({this.profile});
+
+  static const String routeName = "/ProfilePage";
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -34,9 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
   void loadYeets() {
     for (var i = 0; i < Yeets.yeetModels.length; i++) {
       if (Yeets.yeetModels[i].username == profile.username) {
-        yeetModels.add(new YeetModel(id: i.toString(), dateTime: Yeets.yeetModels[i].dateTime, colorScheme: Yeets.yeetModels[i].colorScheme, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified, objectId: Yeets.yeetModels[i].objectId));
+        yeetModels.add(new YeetModel(id: i.toString(), bio: Yeets.yeetModels[i].bio, dateTime: Yeets.yeetModels[i].dateTime, colorScheme: Yeets.yeetModels[i].colorScheme, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified, objectId: Yeets.yeetModels[i].objectId));
       }
     }
+    yeetModels.sort((a, b) => a.dateTime.compareTo(b.dateTime));
   }
 
   @override
@@ -51,8 +56,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             color: Colors.white,
             child: Row(
+              // TODO: Icon funcs
               children: <Widget>[
-                SizedBox(width: 5),
+                IconButton(icon: Icon(MdiIcons.messageDraw), onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -78,17 +84,17 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 30),
           Row(
             children: <Widget>[
-              SizedBox(width: 15),
+              SizedBox(width: 20),
               Expanded(
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.network(
-                      'https://m.media-amazon.com/images/I/81J+-QFsYuL._SS500_.jpg',
+                      profile.imageUrl,
                       width: 90.0,
                       height: 90.0,
                       fit: BoxFit.cover,
@@ -123,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -135,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           Text(
                             '@' + profile.username,
-                            style: TextStyle(fontSize: 15, color: Colors.white),
+                            style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(width: 2),
                           profile.verified
@@ -154,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: SizedBox(
-                      height: 80,
+                      height: 78,
                       width: 180,
                       child: Text(
                         profile.bio,
@@ -168,6 +174,28 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          yeetModels.length != 0
+              ? Column(children: <Widget>[
+                  Text(
+                    "Last Yeet by ${profile.displayname}.",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Hero(tag: yeetModels.last.id, child: YeetCardWidget(yeetModel: yeetModels.last)),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10.0),
+                        child: RaisedButton(
+                          color: Colors.white,
+                          onPressed: () => print('Loading Yeets'), // TODO: nav to user yeets
+                          child: Text('View All Yeets'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ])
+              : SizedBox.shrink(),
           // return Container(
           //   child: ListView.builder(
           //     itemCount: yeetModels.length,
@@ -177,19 +205,6 @@ class _ProfilePageState extends State<ProfilePage> {
           //     },
           //   ),
           // );
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: RaisedButton(
-                  color: Colors.white,
-                  onPressed: () => print('Loading Yeets'), // TODO: nav to user yeets
-                  child: Text('Yeets by ${yeetModels[0].displayname}'),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
