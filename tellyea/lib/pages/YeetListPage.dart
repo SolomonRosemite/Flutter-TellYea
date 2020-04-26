@@ -41,6 +41,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         Navigator.pushNamed(context, Splash.routeName);
         visible = true;
       });
+      tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
     var listener = Backend.initListener('Yeets');
     listener.addCreateListener(addMessages);
@@ -101,91 +102,87 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       child: AnimatedOpacity(
         opacity: visible ? 1.0 : 0.0,
         duration: Duration(seconds: 1),
-        child: DefaultTabController(
-          initialIndex: 1,
-          length: 3,
-          child: Scaffold(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
+            ],
+            title: Text(
+              timeString,
+              style: TextStyle(color: Colors.black),
+            ),
+            centerTitle: true,
+            elevation: 0,
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.settings,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
-              ],
-              title: Text(
-                timeString,
-                style: TextStyle(color: Colors.black),
+          ),
+          body: TabBarView(
+            controller: tabController,
+            children: <Widget>[
+              // Page View 1: Profile
+              new Container(
+                child: Center(
+                  // TODO: Work the Profile Page
+
+                  // TODO: Helpful links for Later 'Images' to downscale...
+                  // https://pub.dev/packages/image_picker
+                  // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
+
+                  // TODO: Redesign 'Post YeetPage'
+                  child: new ProfilePage(profile: profile),
+                ),
               ),
-              centerTitle: true,
-              elevation: 0,
-              // elevation: 10,
-              backgroundColor: Colors.white,
-            ),
-            body: TabBarView(
-              // controller: tabController,
-              children: <Widget>[
-                // Page View 1: Profile
-                new Container(
-                  child: Center(
-                    // TODO: Work the Profile Page
-
-                    // TODO: Helpful links for Later 'Images' to downscale...
-                    // https://pub.dev/packages/image_picker
-                    // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
-
-                    // TODO: Redesign 'Post YeetPage'
-                    child: new ProfilePage(profile: profile),
-                  ),
+              // Page View 2: Main YeetList
+              new Container(
+                child: ListView.builder(
+                  itemCount: yeetModels.length,
+                  padding: EdgeInsets.only(top: 20),
+                  itemBuilder: (context, index) {
+                    return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
+                  },
                 ),
-                // Page View 2: Main YeetList
-                new Container(
-                  child: ListView.builder(
-                    itemCount: yeetModels.length,
-                    padding: EdgeInsets.only(top: 20),
-                    itemBuilder: (context, index) {
-                      return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
-                    },
-                  ),
-                ),
-                // Page View 3: Direct Message and Friends
-                // new Container(
-                //   child: Center(
-                //     child: Text("Direct Message and Friends"),
-                //   ),
-                // ),
-                new Container(
-                  child: new Preferences(true),
-                ),
-              ],
-            ),
-            bottomNavigationBar: new TabBar(
-              tabs: [
-                Tab(
-                  icon: new Icon(Icons.account_box),
-                ),
-                Tab(
-                  icon: new Icon(Icons.home),
-                ),
-                Tab(
-                  icon: new Icon(Icons.message),
-                )
-              ],
-              labelColor: Colors.red,
-              unselectedLabelColor: Colors.blue,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorPadding: EdgeInsets.all(5.0),
-              indicatorColor: Colors.blueGrey[700],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.pushNamed(context, PostYeet.routeName);
-              },
-              child: Icon(Icons.message),
-            ),
+              ),
+              // Page View 3: Direct Message and Friends
+              // new Container(
+              //   child: Center(
+              //     child: Text("Direct Message and Friends"),
+              //   ),
+              // ),
+              new Container(
+                child: new Preferences(true),
+              ),
+            ],
+          ),
+          bottomNavigationBar: new TabBar(
+            controller: tabController,
+            tabs: [
+              Tab(
+                icon: new Icon(Icons.account_box),
+              ),
+              Tab(
+                icon: new Icon(Icons.home),
+              ),
+              Tab(
+                icon: new Icon(Icons.message),
+              )
+            ],
+            labelColor: Colors.red,
+            unselectedLabelColor: Colors.blue,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorPadding: EdgeInsets.all(5.0),
+            indicatorColor: Colors.blueGrey[700],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, PostYeet.routeName);
+            },
+            child: Icon(Icons.message),
           ),
         ),
       ),

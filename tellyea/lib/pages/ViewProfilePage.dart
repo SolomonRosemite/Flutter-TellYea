@@ -46,6 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    // return Container();
     return Container(
       color: profile.colorScheme,
       child: Column(
@@ -95,8 +96,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.network(
                       profile.imageUrl,
-                      width: 90.0,
-                      height: 90.0,
+                      width: 70.0,
+                      height: 70.0,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -181,30 +182,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   Hero(tag: yeetModels.last.id, child: YeetCardWidget(yeetModel: yeetModels.last)),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 10.0),
-                        child: RaisedButton(
-                          color: Colors.white,
-                          onPressed: () => print('Loading Yeets'), // TODO: nav to user yeets
-                          child: Text('View All Yeets'),
-                        ),
+                ])
+              : SizedBox.shrink(),
+          yeetModels.length != 0
+              ? Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: RaisedButton(
+                        color: Colors.white,
+                        onPressed: () => print('Loading Yeets'), // TODO: nav to user yeets
+                        child: Text('View All Yeets'),
                       ),
                     ),
                   ),
-                ])
+                )
               : SizedBox.shrink(),
-          // return Container(
-          //   child: ListView.builder(
-          //     itemCount: yeetModels.length,
-          //     padding: EdgeInsets.only(top: 20),
-          //     itemBuilder: (context, index) {
-          //       return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
-          //     },
-          //   ),
-          // );
         ],
       ),
     );
