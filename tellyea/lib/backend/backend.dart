@@ -10,6 +10,8 @@ class Backend {
   static bool userLoaded = false;
   static bool userIsOffline = false;
 
+  static List<Map> tellYeaUsers;
+
   static void initialize() async {
     Backendless.setUrl('https://api.backendless.com');
     Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
@@ -34,7 +36,7 @@ class Backend {
         'displayname': displayName,
         'username': username
       });
-      ThisUser.loadData(colorScheme: 'primaryColor', bio: 'Hey, I\'m using TellYea', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
+      ThisUser.loadData(colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
       return true;
     } catch (e) {
       save("Reports", {
@@ -54,13 +56,13 @@ class Backend {
       try {
         DataQueryBuilder queryBuilder = DataQueryBuilder()..whereClause = 'email = \'$email\'';
         Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
-        ThisUser.loadData(colorScheme: user['colorScheme'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
+        ThisUser.loadData(colorScheme: user['colorScheme'], created: user['created'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
       } catch (e) {
         save("Reports", {
           "context": e.toString()
         });
+        userLoaded = true;
       }
-
       userLoaded = true;
       return true;
     } catch (_) {
@@ -68,11 +70,15 @@ class Backend {
     }
   }
 
-  static Future<List<Map<dynamic, dynamic>>> readTable(String tableName) async {
+  static Future<List<Map<dynamic, dynamic>>> readTable(String tableName, {String whereClause}) async {
     if (initialized == false) initialize();
 
     int count = await Backendless.data.of(tableName).getObjectCount();
     DataQueryBuilder queryBuilder = DataQueryBuilder()..pageSize = count;
+
+    if (whereClause == null) {
+      queryBuilder.whereClause = whereClause;
+    }
 
     return await Backendless.data.of(tableName).find(queryBuilder);
   }

@@ -25,6 +25,8 @@ void loginUser() async {
   }
   await MySharedPreferences.initialize();
 
+  Backend.tellYeaUsers = await Backend.readTable('TellYeaUsers');
+
   // If the user has already logged in before.
   if (MySharedPreferences.getString('email') != null) {
     Backend.loginUser(MySharedPreferences.getString('email'), MySharedPreferences.getString('password'));

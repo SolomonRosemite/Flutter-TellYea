@@ -1,9 +1,10 @@
 import 'package:TellYea/backend/SmallFunctions.dart';
-import 'package:TellYea/model/Profile.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/common/FadePageRoute.dart';
+import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/pages/ViewYeetPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
@@ -14,13 +15,11 @@ class YeetCardWidget extends StatefulWidget {
   YeetCardWidget({@required this.yeetModel});
 
   @override
-  _YeetCardWidgetState createState() => _YeetCardWidgetState();
+  YeetCardWidgetState createState() => YeetCardWidgetState();
 }
 
-class _YeetCardWidgetState extends State<YeetCardWidget> {
-  Profile loadProfile() {
-    return new Profile(bio: widget.yeetModel.bio, colorScheme: widget.yeetModel.colorScheme, displayname: widget.yeetModel.displayname, imageUrl: widget.yeetModel.imageUrl, username: widget.yeetModel.username, verified: widget.yeetModel.verified);
-  }
+class YeetCardWidgetState extends State<YeetCardWidget> {
+  static String bio;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +68,8 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                             ),
                                             SizedBox(width: 3),
                                             widget.yeetModel.verified
-                                                ? Image.network(
-                                                    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png",
+                                                ? Image.asset(
+                                                    "images/Verified_Badge.png",
                                                     width: 12.0,
                                                     height: 12.0,
                                                     fit: BoxFit.cover,
@@ -89,9 +88,26 @@ class _YeetCardWidgetState extends State<YeetCardWidget> {
                                 ),
                                 Spacer(flex: 98),
                                 GestureDetector(
-                                  onTapDown: (_) => Navigator.pushNamed(context, ProfilePage.routeName, arguments: loadProfile()),
+                                  onTapDown: (_) async {
+                                    for (var item in Backend.tellYeaUsers) {
+                                      if (item['username'] == widget.yeetModel.username) {
+                                        bio = item['bio'];
+                                        break;
+                                      }
+                                    }
+
+                                    // Assign values to ProfilePageState.profile
+                                    ProfilePageState.profile.bio = bio;
+                                    ProfilePageState.profile.colorScheme = widget.yeetModel.colorScheme;
+                                    ProfilePageState.profile.displayname = widget.yeetModel.displayname;
+                                    ProfilePageState.profile.imageUrl = widget.yeetModel.imageUrl;
+                                    ProfilePageState.profile.username = widget.yeetModel.username;
+                                    ProfilePageState.profile.verified = widget.yeetModel.verified;
+
+                                    // Move over the Profile page
+                                    YeetListPageState.tabController.animateTo(0);
+                                  },
                                   child: ClipRRect(
-                                    // TODO: If user clicks Profile pic. nav to that user.
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: Image.network(
                                       widget.yeetModel.imageUrl,

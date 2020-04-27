@@ -41,10 +41,14 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         Navigator.pushNamed(context, Splash.routeName);
         visible = true;
       });
+      // profile = new Profile();
       tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
-    var listener = Backend.initListener('Yeets');
-    listener.addCreateListener(addMessages);
+    var yeetListener = Backend.initListener('Yeets');
+    yeetListener.addCreateListener(addMessages);
+
+    var newYeetUserListener = Backend.initListener('Yeets');
+    newYeetUserListener.addCreateListener(addUser);
 
     loadMessages();
 
@@ -61,6 +65,8 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     });
   }
 
+  void addUser(Map user) => Backend.tellYeaUsers.add(user);
+
   void addMessages(Map map) {
     index += 1;
     Color colorScheme;
@@ -74,9 +80,8 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
 
     setState(() {
-      yeetModels.insert(0, new YeetModel(id: index.toString(), bio: map["bio"], dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
+      yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
     });
-    tabController.animateTo(0);
     Yeets.yeetModels = this.yeetModels;
   }
 
@@ -89,7 +94,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
     for (var i = 0; i < yeets.length; i++) {
       Color colorScheme = ColorSchemes.colorSchemesToColor(yeets[i]["colorScheme"]);
-      yeetModels.add(new YeetModel(id: i.toString(), bio: yeets[i]["bio"], dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
+      yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
       this.index = i;
     }
     Yeets.yeetModels = this.yeetModels;
@@ -135,7 +140,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                   // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
 
                   // TODO: Redesign 'Post YeetPage'
-                  child: new ProfilePage(profile: profile),
+                  child: new ProfilePage(),
                 ),
               ),
               // Page View 2: Main YeetList

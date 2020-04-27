@@ -10,27 +10,28 @@ import 'package:TellYea/common/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  final Profile profile;
-  ProfilePage({this.profile});
-
   static const String routeName = "/ProfilePage";
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  Profile profile;
+class ProfilePageState extends State<ProfilePage> {
   List<YeetModel> yeetModels = new List<YeetModel>();
+  static Profile profile = new Profile();
 
   @override
   void initState() {
-    if (widget.profile == null) {
-      profile = new Profile(displayname: ThisUser.displayname, bio: ThisUser.bio, colorScheme: ColorSchemes.colorSchemesToColor(ThisUser.colorScheme), username: ThisUser.username, imageUrl: ThisUser.imageUrl, verified: ThisUser.verified);
+    if (profile.bio == null) {
+      profile.bio = ThisUser.bio;
+      profile.colorScheme = ColorSchemes.colorSchemesToColor(ThisUser.colorScheme);
+      profile.displayname = ThisUser.displayname;
+      profile.imageUrl = ThisUser.imageUrl;
+      profile.username = ThisUser.username;
+      profile.verified = ThisUser.verified;
       loadYeets();
       return;
     }
-    profile = widget.profile;
     loadYeets();
     super.initState();
   }
@@ -38,15 +39,20 @@ class _ProfilePageState extends State<ProfilePage> {
   void loadYeets() {
     for (var i = 0; i < Yeets.yeetModels.length; i++) {
       if (Yeets.yeetModels[i].username == profile.username) {
-        yeetModels.add(new YeetModel(id: i.toString(), bio: Yeets.yeetModels[i].bio, dateTime: Yeets.yeetModels[i].dateTime, colorScheme: Yeets.yeetModels[i].colorScheme, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified, objectId: Yeets.yeetModels[i].objectId));
+        yeetModels.add(new YeetModel(id: i.toString(), dateTime: Yeets.yeetModels[i].dateTime, colorScheme: Yeets.yeetModels[i].colorScheme, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified, objectId: Yeets.yeetModels[i].objectId));
       }
     }
     yeetModels.sort((a, b) => a.dateTime.compareTo(b.dateTime));
   }
 
   @override
+  void dispose() {
+    profile = new Profile();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // return Container();
     return Container(
       color: profile.colorScheme,
       child: Column(
@@ -86,6 +92,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: 30),
+          // SingleChildScrollView(
+          //   scrollDirection: Axis.horizontal,
+          //   physics: AlwaysScrollableScrollPhysics(),
+          //   child: Column(
+          //     children: <Widget>[],
+          //   ),
+          // ),
           Row(
             children: <Widget>[
               SizedBox(width: 20),
@@ -146,8 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(width: 2),
                           profile.verified
-                              ? Image.network(
-                                  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png",
+                              ? Image.asset(
+                                  "images/Verified_Badge.png",
                                   width: 11.0,
                                   height: 11.0,
                                   fit: BoxFit.cover,
@@ -178,7 +191,7 @@ class _ProfilePageState extends State<ProfilePage> {
           yeetModels.length != 0
               ? Column(children: <Widget>[
                   Text(
-                    "Last Yeet by ${profile.displayname}.",
+                    "Last Yeet by ${profile.displayname}",
                     style: TextStyle(color: Colors.white),
                   ),
                   Hero(tag: yeetModels.last.id, child: YeetCardWidget(yeetModel: yeetModels.last)),
