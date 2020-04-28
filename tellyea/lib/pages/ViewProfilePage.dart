@@ -45,6 +45,14 @@ class ProfilePageState extends State<ProfilePage> {
     yeetModels.sort((a, b) => a.dateTime.compareTo(b.dateTime));
   }
 
+  Widget heroWidgets() {
+    List<Widget> list = new List<Widget>();
+    for (var i = yeetModels.length - 1; 0 <= i; i--) {
+      list.add(new Hero(tag: yeetModels[i].id, child: YeetCardWidget(yeetModel: yeetModels[i])));
+    }
+    return new Column(children: list);
+  }
+
   @override
   void dispose() {
     profile = new Profile();
@@ -53,166 +61,142 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: profile.colorScheme,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            color: Colors.white,
-            child: Row(
-              // TODO: Icon funcs
-              children: <Widget>[
-                IconButton(icon: Icon(MdiIcons.messageDraw), onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      profile.displayname,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(MdiIcons.accountMultiplePlus),
-                  onPressed: () {
-                    print('test');
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.message),
-                  onPressed: () {
-                    print('test');
-                  },
-                ),
-                SizedBox(width: 5),
-              ],
-            ),
-          ),
-          SizedBox(height: 30),
-          // SingleChildScrollView(
-          //   scrollDirection: Axis.horizontal,
-          //   physics: AlwaysScrollableScrollPhysics(),
-          //   child: Column(
-          //     children: <Widget>[],
-          //   ),
-          // ),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 20),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.network(
-                      profile.imageUrl,
-                      width: 70.0,
-                      height: 70.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        yeetModels.length.toString(),
-                        style: TextStyle(fontSize: 30, color: Colors.white),
-                      ),
-                      Text(
-                        'Total Yeets',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'User Since 2020',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 30),
-            ],
-          ),
-          SizedBox(height: 20),
-          Container(
-            padding: EdgeInsets.only(left: 15),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
+    return SingleChildScrollView(
+      child: Container(
+        color: profile.colorScheme,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              child: Row(
+                // TODO: Icon funcs
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            '@' + profile.username,
-                            style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(width: 2),
-                          profile.verified
-                              ? Image.asset(
-                                  "images/Verified_Badge.png",
-                                  width: 11.0,
-                                  height: 11.0,
-                                  fit: BoxFit.cover,
-                                )
-                              : SizedBox.shrink(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                      height: 78,
-                      width: 180,
+                  IconButton(icon: Icon(MdiIcons.messageDraw), onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        profile.bio,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        profile.displayname,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
+                  IconButton(
+                    icon: Icon(MdiIcons.accountMultiplePlus),
+                    onPressed: () {
+                      print('test');
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.message),
+                    onPressed: () {
+                      print('test');
+                    },
+                  ),
+                  SizedBox(width: 5),
                 ],
               ),
             ),
-          ),
-          yeetModels.length != 0
-              ? Column(children: <Widget>[
-                  Text(
-                    "Last Yeet by ${profile.displayname}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Hero(tag: yeetModels.last.id, child: YeetCardWidget(yeetModel: yeetModels.last)),
-                ])
-              : SizedBox.shrink(),
-          yeetModels.length != 0
-              ? Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: RaisedButton(
-                        color: Colors.white,
-                        onPressed: () => print('Loading Yeets'), // TODO: nav to user yeets
-                        child: Text('View All Yeets'),
+            Column(
+              children: <Widget>[
+                SizedBox(height: 30),
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.network(
+                            profile.imageUrl,
+                            width: 70.0,
+                            height: 70.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              yeetModels.length.toString(),
+                              style: TextStyle(fontSize: 30, color: Colors.white),
+                            ),
+                            Text(
+                              'Total Yeets',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'User Since 2020',
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  '@' + profile.username,
+                                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(width: 2),
+                                profile.verified
+                                    ? Image.asset(
+                                        "images/Verified_Badge.png",
+                                        width: 11.0,
+                                        height: 11.0,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : SizedBox.shrink(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            height: 78,
+                            width: 180,
+                            child: Text(
+                              profile.bio,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        yeetModels.length != 0 ? heroWidgets() : SizedBox.shrink(),
+                      ],
+                    ),
                   ),
-                )
-              : SizedBox.shrink(),
-        ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
