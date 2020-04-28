@@ -9,6 +9,7 @@ class ThisUser {
 
   static void loadData({String displayname, DateTime created, String bio, String colorScheme, String username, String imageUrl, bool verified}) {
     ThisUser.bio = bio;
+    ThisUser.created = created;
     ThisUser.colorScheme = colorScheme;
     ThisUser.displayname = displayname;
     ThisUser.imageUrl = imageUrl;

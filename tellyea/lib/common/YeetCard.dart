@@ -20,6 +20,7 @@ class YeetCardWidget extends StatefulWidget {
 
 class YeetCardWidgetState extends State<YeetCardWidget> {
   static String bio;
+  static DateTime created;
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +93,14 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                     for (var item in Backend.tellYeaUsers) {
                                       if (item['username'] == widget.yeetModel.username) {
                                         bio = item['bio'];
+                                        created = item['created'];
                                         break;
                                       }
                                     }
 
                                     // Assign values to ProfilePageState.profile
                                     ProfilePageState.profile.bio = bio;
+                                    ProfilePageState.profile.created = created;
                                     ProfilePageState.profile.colorScheme = widget.yeetModel.colorScheme;
                                     ProfilePageState.profile.displayname = widget.yeetModel.displayname;
                                     ProfilePageState.profile.imageUrl = widget.yeetModel.imageUrl;
@@ -147,7 +150,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                             Spacer(flex: 1),
                             Spacer(flex: 1000),
                             Text(
-                              SmallFunctions.formatFullDateTime(widget.yeetModel.dateTime),
+                              SmallFunctions.formatDateTimeDayMonthTime(widget.yeetModel.dateTime),
                               style: TextStyle(color: Colors.white),
                             ),
                             Spacer(flex: 1),

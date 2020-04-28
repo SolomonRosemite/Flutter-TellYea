@@ -1,5 +1,6 @@
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:TellYea/pages/Settings/Preferences.dart';
+import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/common/YeetCard.dart';
@@ -24,6 +25,7 @@ class ProfilePageState extends State<ProfilePage> {
   void initState() {
     if (profile.bio == null) {
       profile.bio = ThisUser.bio;
+      profile.created = ThisUser.created;
       profile.colorScheme = ColorSchemes.colorSchemesToColor(ThisUser.colorScheme);
       profile.displayname = ThisUser.displayname;
       profile.imageUrl = ThisUser.imageUrl;
@@ -50,6 +52,12 @@ class ProfilePageState extends State<ProfilePage> {
     for (var i = yeetModels.length - 1; 0 <= i; i--) {
       list.add(new Hero(tag: yeetModels[i].id, child: YeetCardWidget(yeetModel: yeetModels[i])));
     }
+    list.insert(
+        0,
+        Text(
+          'Yeets by ${yeetModels[0].displayname}',
+          style: TextStyle(color: Colors.white),
+        ));
     return new Column(children: list);
   }
 
@@ -135,8 +143,8 @@ class ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'User Since 2020',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              'User Since ${SmallFunctions.formatDateTimeMonthYear(profile.created)}',
+                              style: TextStyle(fontSize: 15, color: Colors.white),
                             ),
                           ],
                         ),

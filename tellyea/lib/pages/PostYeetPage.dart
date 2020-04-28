@@ -24,6 +24,9 @@ class _PostYeetState extends State<PostYeet> {
       return;
     }
 
+    message = message.trimLeft();
+    message = message.trimRight();
+
     await Backend.saveAwait('Yeets', {
       'displayname': ThisUser.displayname,
       'colorScheme': ThisUser.colorScheme,
