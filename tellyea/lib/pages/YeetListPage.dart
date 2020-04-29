@@ -133,8 +133,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
               // Page View 1: Profile
               new Container(
                 child: Center(
-                  // TODO: Work the Profile Page
-
                   // TODO: Helpful links for Later 'Images' to downscale...
                   // https://pub.dev/packages/image_picker
                   // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart

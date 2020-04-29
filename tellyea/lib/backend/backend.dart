@@ -30,13 +30,15 @@ class Backend {
       user.email = email;
       user.password = password;
       await Backendless.userService.register(user);
-      save('TellYeaUsers', {
+      await Backend.loginUser(email, password);
+      Backend.save('TellYeaUsers', {
+        'bio': 'Hey, I\'m using TellYea',
         'colorScheme': 'primaryColor',
         'email': email,
         'displayname': displayName,
         'username': username
       });
-      ThisUser.loadData(colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: 'displayName', imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
+      ThisUser.loadData(colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: displayName, imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
       return true;
     } catch (e) {
       save("Reports", {
