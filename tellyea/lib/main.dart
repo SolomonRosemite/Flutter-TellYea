@@ -6,6 +6,7 @@ import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/SplashScreen.dart';
+import 'package:TellYea/common/theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     var routes = <String, WidgetBuilder>{
-      Preferences.routeName: (BuildContext context) => new Preferences(false),
+      Preferences.routeName: (BuildContext context) => new Preferences(),
       ProfilePage.routeName: (BuildContext context) => new ProfilePage(),
       LoginScreen.routeName: (BuildContext context) => new LoginScreen(),
       PostYeet.routeName: (BuildContext context) => new PostYeet(),
@@ -56,6 +57,7 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'TellYea',
       home: new YeetListPage(),
+      color: ColorSchemes.primaryColor,
       routes: routes,
     );
   }

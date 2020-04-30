@@ -19,6 +19,8 @@ class Yeets {
 }
 
 class YeetListPage extends StatefulWidget {
+  static const String routeName = "/home";
+
   @override
   YeetListPageState createState() => YeetListPageState();
 }
@@ -41,7 +43,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         Navigator.pushNamed(context, Splash.routeName);
         visible = true;
       });
-      // profile = new Profile();
       tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
     var yeetListener = Backend.initListener('Yeets');
@@ -152,13 +153,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                 ),
               ),
               // Page View 3: Direct Message and Friends
-              // new Container(
-              //   child: Center(
-              //     child: Text("Direct Message and Friends"),
-              //   ),
-              // ),
               new Container(
-                child: new Preferences(true),
+                child: Center(
+                  child: Text("Direct Message and Friends"),
+                ),
               ),
             ],
           ),
