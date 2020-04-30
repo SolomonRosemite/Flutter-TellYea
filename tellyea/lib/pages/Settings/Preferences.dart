@@ -18,26 +18,25 @@ class _PreferencesState extends State<Preferences> {
 
   void closePage() => Navigator.of(context).pop();
 
-  void showMyDialog() {
-    // flutter defined function
+  void showMyDialog({String title = 'Unsaved Settings', String content = 'Are you sure you dont want to Save?', String confirmText = 'Don\'t Save'}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
+          title: new Text(title),
+          content: new Text(content),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("Cancel"),
+              child: new Text('Go Back'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             new FlatButton(
+                color: Colors.red,
                 child: new Text(
-                  "Don't Save",
-                  style: TextStyle(color: Colors.black),
+                  confirmText,
+                  style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -50,21 +49,32 @@ class _PreferencesState extends State<Preferences> {
   }
 
   Widget settingsbutton({@required String context, @required Function() callback, Alignment textAlignment = Alignment.centerLeft, Color textColor = Colors.white, FontWeight fontWeight = FontWeight.normal, double fontSize = 15, double height = 50}) {
-    return Container(
-      width: double.infinity,
-      // color: Colors.transparent,
-      height: height,
-      child: RaisedButton(
-          color: Colors.white,
-          elevation: 0,
-          onPressed: () => callback(),
-          child: Container(
-            alignment: textAlignment,
-            child: Text(
-              context,
-              style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: fontWeight),
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 0,
+          // height: 1.5,
+          width: double.infinity,
+          child: Container(color: Colors.grey),
+        ),
+        Container(
+          width: double.infinity,
+          // color: Colors.transparent,
+          height: height,
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () => callback(),
+            child: Container(
+              alignment: textAlignment,
+              child: Text(
+                context,
+                style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: fontWeight),
+              ),
             ),
-          )),
+          ),
+        ),
+      ],
     );
   }
 
@@ -74,7 +84,7 @@ class _PreferencesState extends State<Preferences> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: new IconButton(
-            icon: new Icon(Icons.close, size: 25, color: Colors.black),
+            icon: new Icon(Icons.close, size: 25, color: Colors.red[300]),
             onPressed: () {
               showMyDialog();
             }),
@@ -85,14 +95,12 @@ class _PreferencesState extends State<Preferences> {
         elevation: 5,
         centerTitle: true,
         actions: <Widget>[
-          new FlatButton(
-            color: Colors.white,
+          new IconButton(
+            icon: new Icon(Icons.done, size: 25, color: Colors.blue[300]),
             onPressed: () => Navigator.of(context).pop(null),
-            child: Text('Done'),
-          ),
+          )
         ],
       ),
-      // body: preferences(context),
       body: Container(
         color: Colors.white,
         child: Column(
@@ -101,9 +109,26 @@ class _PreferencesState extends State<Preferences> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 20),
+            // Container(
+            //   height: 60,
+            //   width: double.infinity,
+            //   color: Colors.grey[400],
+            //   child: Container(
+            //     alignment: Alignment.centerLeft,
+            //     child: Text(
+            //       '  @${ThisUser.username}',
+            //       style: TextStyle(
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.grey[800],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Text(
-              'Account:\n@${ThisUser.username}',
+              '@${ThisUser.username}',
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
             ),
             SizedBox(height: 20),
             GestureDetector(
@@ -112,12 +137,13 @@ class _PreferencesState extends State<Preferences> {
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.network(
                   ThisUser.imageUrl,
-                  width: 100.0,
-                  height: 100.0,
+                  width: 120.0,
+                  height: 120.0,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
+            SizedBox(height: 10),
             FlatButton(
               onPressed: () {
                 print('Change Profile pic');
@@ -127,94 +153,38 @@ class _PreferencesState extends State<Preferences> {
                 style: TextStyle(fontWeight: FontWeight.normal),
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.only(left: 60, right: 60, top: 30),
-            //   child: TextField(
-            //     // maxLines: 1,
-            //     textInputAction: TextInputAction.done,
-            //     style: TextStyle(color: Colors.white),
-            //     onChanged: (bio) {
-            //       this.bio = bio;
-            //       if (bio.isEmpty) {
-            //         setState(() {
-            //           buttonEnabled = Colors.grey;
-            //         });
-            //         return;
-            //       }
-
-            //       setState(() {
-            //         buttonEnabled = Colors.white;
-            //       });
-            //     },
-            //     decoration: InputDecoration(
-            //       hintStyle: TextStyle(color: Colors.white),
-            //       hintText: "Post a Yeet!",
-            //       border: OutlineInputBorder(),
-            //       focusColor: Colors.white,
-            //     ),
-            //   ),
-            // ),
-            // Container(
-            //   margin: EdgeInsets.only(left: 60, right: 60, top: 30),
-            //   child: TextField(
-            //     maxLines: 1,
-            //     textInputAction: TextInputAction.newline,
-            //     style: TextStyle(color: Colors.white),
-            //     onChanged: (bio) {
-            //       this.bio = bio;
-            //       if (bio.isEmpty) {
-            //         setState(() {
-            //           buttonEnabled = Colors.grey;
-            //         });
-            //         return;
-            //       }
-
-            //       setState(() {
-            //         buttonEnabled = Colors.white;
-            //       });
-            //     },
-            //     decoration: InputDecoration(
-            //       hintStyle: TextStyle(color: Colors.white),
-            //       hintText: "Post a Yeet!",
-            //       border: OutlineInputBorder(),
-            //       focusColor: Colors.white,
-            //     ),
-            //   ),
-            // ),
-            Spacer(flex: 1),
             Spacer(flex: 1000),
-            RaisedButton(
-              onPressed: () {
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (BuildContext context) => CupertinoActionSheet(
-                    title: Text('ColorScheme'),
-                    message: Text('Pick a ColorScheme'),
-                    actions: <Widget>[
-                      CupertinoActionSheetAction(
+            settingsbutton(
+                callback: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext context) => CupertinoActionSheet(
+                      title: Text('ColorScheme'),
+                      message: Text('Pick a ColorScheme'),
+                      actions: <Widget>[
+                        CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Blue')),
+                        CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Red'))
+                      ],
+                      cancelButton: CupertinoActionSheetAction(
                           onPressed: () {
-                            print('1');
                             Navigator.pop(context);
                           },
-                          child: Text('1')),
-                      CupertinoActionSheetAction(
-                          onPressed: () {
-                            print('2');
-                            Navigator.pop(context);
-                          },
-                          child: Text('2'))
-                    ],
-                    cancelButton: CupertinoActionSheetAction(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel')),
-                  ),
-                );
-              },
-              child: Text('Pick your ColorScheme'),
-            ),
-            Spacer(flex: 1000),
+                          child: Text('Cancel', style: TextStyle(color: Colors.red[300]))),
+                    ),
+                  );
+                },
+                context: 'Pick your ColorScheme',
+                textAlignment: Alignment.center,
+                fontSize: 15,
+                textColor: Colors.black),
             settingsbutton(
                 callback: () {
                   print('Edit Profile');
@@ -225,12 +195,12 @@ class _PreferencesState extends State<Preferences> {
                 textColor: Colors.black),
             settingsbutton(
                 callback: () {
-                  print('logout');
+                  showMyDialog(title: 'Logout', content: 'Are you sure you want to Logout?', confirmText: 'Logout');
                 },
                 context: 'Logout',
                 textAlignment: Alignment.center,
                 fontSize: 15,
-                textColor: Colors.black),
+                textColor: Colors.red[300]),
             Spacer(flex: 1),
           ],
         ),
