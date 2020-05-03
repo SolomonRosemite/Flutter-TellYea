@@ -1,9 +1,7 @@
-import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/model/ThisUser.dart';
+import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:TellYea/common/theme.dart';
 
 class Preferences extends StatefulWidget {
   static const String routeName = "/Preferences";
@@ -13,9 +11,6 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
-  Color buttonEnabled = Colors.grey;
-  String bio = "";
-
   void closePage() => Navigator.of(context).pop();
 
   void showMyDialog({String title = 'Unsaved Settings', String content = 'Are you sure you dont want to Save?', String confirmText = 'Don\'t Save'}) {
@@ -126,9 +121,9 @@ class _PreferencesState extends State<Preferences> {
             //   ),
             // ),
             Text(
-              '@${ThisUser.username}',
+              '${ThisUser.displayname}',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             GestureDetector(
@@ -185,14 +180,7 @@ class _PreferencesState extends State<Preferences> {
                 textAlignment: Alignment.center,
                 fontSize: 15,
                 textColor: Colors.black),
-            settingsbutton(
-                callback: () {
-                  print('Edit Profile');
-                },
-                context: 'Edit Name and Bio',
-                textAlignment: Alignment.center,
-                fontSize: 15,
-                textColor: Colors.black),
+            settingsbutton(callback: () => Navigator.pushNamed(context, ExtraPreferencesPage.routeName), context: 'Edit Name and Bio', textAlignment: Alignment.center, fontSize: 15, textColor: Colors.black),
             settingsbutton(
                 callback: () {
                   showMyDialog(title: 'Logout', content: 'Are you sure you want to Logout?', confirmText: 'Logout');

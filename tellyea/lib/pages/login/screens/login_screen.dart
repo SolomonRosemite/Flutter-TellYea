@@ -53,6 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (_username.contains('@')) {
+      alertUser('Username Can\'t contain @');
+      return;
+    }
+
     if (!_email.contains('@') || !_email.contains('.')) {
       alertUser('Email is not valid');
       return;

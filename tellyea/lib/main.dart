@@ -1,3 +1,4 @@
+import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:TellYea/pages/login/screens/login_screen.dart';
 import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
@@ -48,6 +49,7 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     var routes = <String, WidgetBuilder>{
+      ExtraPreferencesPage.routeName: (BuildContext context) => new ExtraPreferencesPage(),
       Preferences.routeName: (BuildContext context) => new Preferences(),
       ProfilePage.routeName: (BuildContext context) => new ProfilePage(),
       LoginScreen.routeName: (BuildContext context) => new LoginScreen(),
