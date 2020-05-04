@@ -1,13 +1,25 @@
+import 'package:flutter/cupertino.dart';
+
 class ThisUser {
   static String bio;
   static DateTime created;
   static String colorScheme;
   static String displayname;
   static String imageUrl;
+  static String ownerId;
   static String username;
   static bool verified;
 
-  static void loadData({String displayname, DateTime created, String bio, String colorScheme, String username, String imageUrl, bool verified}) {
+  static void loadData({
+    @required String displayname,
+    @required DateTime created,
+    @required String bio,
+    @required String colorScheme,
+    @required String username,
+    @required String imageUrl,
+    @required bool verified,
+    @required String ownerId,
+  }) {
     ThisUser.bio = bio;
     ThisUser.created = created;
     ThisUser.colorScheme = colorScheme;
@@ -15,5 +27,6 @@ class ThisUser {
     ThisUser.imageUrl = imageUrl;
     ThisUser.username = username;
     ThisUser.verified = verified;
+    ThisUser.ownerId = ownerId;
   }
 }

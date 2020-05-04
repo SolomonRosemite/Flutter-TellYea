@@ -27,7 +27,7 @@ class _PostYeetState extends State<PostYeet> {
     message = message.trimLeft();
     message = message.trimRight();
 
-    await Backend.saveAwait('Yeets', {
+    await Backend.saveAsync('Yeets', {
       'displayname': ThisUser.displayname,
       'colorScheme': ThisUser.colorScheme,
       'username': ThisUser.username,
@@ -79,7 +79,6 @@ class _PostYeetState extends State<PostYeet> {
                     });
                     return;
                   }
-
                   setState(() {
                     buttonEnabled = Colors.white;
                   });

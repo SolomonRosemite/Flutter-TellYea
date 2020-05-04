@@ -38,12 +38,12 @@ class _LoginScreenState extends State<LoginScreen> {
     _email = _email.trimRight();
     _email = _email.trimLeft();
 
-    if (_displayName.length <= 3 && _displayName.length > 16) {
-      alertUser('DisplayName must be at leas 4 to 16 characters long');
+    if (_displayName.length <= 3 || _displayName.length > 20) {
+      alertUser('DisplayName must be at leas 4 to 20 characters long');
       return;
     }
 
-    if (_username.length <= 3 && _username.length > 16) {
+    if (_username.length <= 3 || _username.length > 16) {
       alertUser('Username must be at leas 4 to 16 characters long');
       return;
     }

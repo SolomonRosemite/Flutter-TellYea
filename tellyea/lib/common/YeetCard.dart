@@ -89,7 +89,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                 ),
                                 Spacer(flex: 98),
                                 GestureDetector(
-                                  onTapDown: (_) async {
+                                  onTapDown: (_) {
                                     for (var item in Backend.tellYeaUsers) {
                                       if (item['username'] == widget.yeetModel.username) {
                                         bio = item['bio'];
@@ -97,7 +97,6 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                         break;
                                       }
                                     }
-
                                     // Assign values to ProfilePageState.profile
                                     ProfilePageState.profile.bio = bio;
                                     ProfilePageState.profile.created = created;

@@ -31,14 +31,14 @@ class Backend {
       user.password = password;
       await Backendless.userService.register(user);
       await Backend.loginUser(email, password);
-      Backend.save('TellYeaUsers', {
+      var thisUser = await Backendless.data.of('TellYeaUsers').save({
         'bio': 'Hey, I\'m using TellYea',
         'colorScheme': 'primaryColor',
         'email': email,
         'displayname': displayName,
         'username': username
       });
-      ThisUser.loadData(colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: displayName, imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
+      ThisUser.loadData(ownerId: thisUser['ownerId'], colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: displayName, imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
       return true;
     } catch (e) {
       save("Reports", {
@@ -53,12 +53,10 @@ class Backend {
 
     try {
       await Backendless.userService.login(email, password);
-
-      // Load User
       try {
         DataQueryBuilder queryBuilder = DataQueryBuilder()..whereClause = 'email = \'$email\'';
         Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
-        ThisUser.loadData(colorScheme: user['colorScheme'], created: user['created'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
+        ThisUser.loadData(ownerId: user['ownerId'], colorScheme: user['colorScheme'], created: user['created'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
       } catch (e) {
         save("Reports", {
           "context": e.toString()
@@ -91,13 +89,19 @@ class Backend {
     Backendless.data.of(tableName).update(condition, map);
   }
 
+  static Future<void> updateAsync(String tableName, Map<String, dynamic> map, String condition) async {
+    if (initialized == false) initialize();
+
+    await Backendless.data.of(tableName).update(condition, map);
+  }
+
   static void save(String tableName, Map<String, dynamic> map) {
     if (initialized == false) initialize();
 
     Backendless.data.of(tableName).save(map);
   }
 
-  static Future<void> saveAwait(String tableName, Map<String, dynamic> map) async {
+  static Future<void> saveAsync(String tableName, Map<String, dynamic> map) async {
     if (initialized == false) initialize();
 
     await Backendless.data.of(tableName).save(map);

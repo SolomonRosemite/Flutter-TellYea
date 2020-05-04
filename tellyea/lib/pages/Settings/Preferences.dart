@@ -1,7 +1,48 @@
-import 'package:TellYea/model/ThisUser.dart';
+import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
+import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+class Save {
+  static String bio;
+  static String colorScheme;
+  static String displayname;
+  static String imageUrl;
+  static String username;
+
+  // TODO: Add Image save here aswell
+  // TODO: Update Image Url
+  static Future<void> save({
+    @required String bio,
+    @required String colorScheme,
+    @required String displayname,
+    @required String imageUrl,
+    @required String username,
+  }) async {
+    // Save to Database
+    var wait = Backend.update(
+        'TellYeaUsers',
+        {
+          'bio': bio,
+          'colorScheme': colorScheme,
+          'displayname': displayname,
+          'username': username,
+        },
+        'ownerId =\'${ThisUser.ownerId}\'');
+
+    // TODO: Save data to ThisUser Class
+    ThisUser.bio = bio;
+    ThisUser.colorScheme = colorScheme;
+    ThisUser.displayname = displayname;
+    //TODO ThisUser.imageUrl = imageUrl;
+    ThisUser.username = username;
+
+    // TODO: Fetch new data
+    await wait;
+  }
+}
 
 class Preferences extends StatefulWidget {
   static const String routeName = "/Preferences";
@@ -11,34 +52,68 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
+  bool savedTemp = false;
+  bool timeout = false;
+
+  @override
+  void initState() {
+    if (savedTemp != true) {
+      // TODO: Add a Listener on update
+      Save.bio = ThisUser.bio;
+      Save.colorScheme = ThisUser.colorScheme;
+      Save.displayname = ThisUser.displayname;
+      Save.imageUrl = ThisUser.imageUrl;
+      Save.username = ThisUser.username;
+      savedTemp = true;
+    }
+    super.initState();
+  }
+
+  bool noChange() {
+    if (Save.bio != ThisUser.bio) {
+      return false;
+    } else if (Save.colorScheme != ThisUser.colorScheme) {
+      return false;
+    } else if (Save.displayname != ThisUser.displayname) {
+      return false;
+    } else if (Save.imageUrl != ThisUser.imageUrl) {
+      // TODO: Might not work yet
+      return false;
+    } else if (Save.username != ThisUser.username) {
+      return false;
+    }
+
+    return true;
+  }
+
   void closePage() => Navigator.of(context).pop();
 
-  void showMyDialog({String title = 'Unsaved Settings', String content = 'Are you sure you dont want to Save?', String confirmText = 'Don\'t Save'}) {
+  void showMyDialog({
+    String title = 'Unsaved Settings',
+    String content = 'Are you sure you don\'t want to Save?',
+    String confirmText = 'Don\'t Save',
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text(title),
-          content: new Text(content),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text('Go Back'),
+        return AlertDialog(title: new Text(title), content: new Text(content), actions: <Widget>[
+          new FlatButton(
+            child: new Text('Go Back'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          new FlatButton(
+              color: Colors.red,
+              child: new Text(
+                confirmText,
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-                color: Colors.red,
-                child: new Text(
-                  confirmText,
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  closePage();
-                }),
-          ],
-        );
+                closePage();
+              }),
+        ]);
       },
     );
   }
@@ -91,9 +166,39 @@ class _PreferencesState extends State<Preferences> {
         centerTitle: true,
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.done, size: 25, color: Colors.blue[300]),
-            onPressed: () => Navigator.of(context).pop(null),
-          )
+              icon: new Icon(Icons.done, size: 25, color: Colors.blue[300]),
+              onPressed: () async {
+                if (timeout != true) {
+                  timeout = true;
+                  if (noChange() == true) {
+                    Navigator.of(context).pop(null);
+                    return;
+                  }
+
+                  // Update Profile
+                  await Save.save(
+                    bio: Save.bio,
+                    colorScheme: Save.colorScheme,
+                    displayname: Save.displayname,
+                    imageUrl: Save.imageUrl,
+                    username: Save.username,
+                  );
+
+                  // Update all Yeets made by this User
+                  await Backend.updateAsync(
+                      'Yeets',
+                      {
+                        'bio': Save.bio,
+                        'colorScheme': Save.colorScheme,
+                        'displayname': Save.displayname,
+                        'imageUrl': Save.imageUrl,
+                        'username': Save.username,
+                      },
+                      'ownerId = \'${ThisUser.ownerId}\'');
+
+                  Navigator.of(context).pop();
+                }
+              })
         ],
       ),
       body: Container(
@@ -104,24 +209,8 @@ class _PreferencesState extends State<Preferences> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 20),
-            // Container(
-            //   height: 60,
-            //   width: double.infinity,
-            //   color: Colors.grey[400],
-            //   child: Container(
-            //     alignment: Alignment.centerLeft,
-            //     child: Text(
-            //       '  @${ThisUser.username}',
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         fontWeight: FontWeight.bold,
-            //         color: Colors.grey[800],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Text(
-              '${ThisUser.displayname}',
+              '${Save.displayname}',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
@@ -159,11 +248,13 @@ class _PreferencesState extends State<Preferences> {
                       actions: <Widget>[
                         CupertinoActionSheetAction(
                             onPressed: () {
+                              Save.colorScheme = 'primaryColor';
                               Navigator.pop(context);
                             },
                             child: Text('Blue')),
                         CupertinoActionSheetAction(
                             onPressed: () {
+                              Save.colorScheme = 'red';
                               Navigator.pop(context);
                             },
                             child: Text('Red'))
@@ -183,6 +274,7 @@ class _PreferencesState extends State<Preferences> {
             settingsbutton(callback: () => Navigator.pushNamed(context, ExtraPreferencesPage.routeName), context: 'Edit Name and Bio', textAlignment: Alignment.center, fontSize: 15, textColor: Colors.black),
             settingsbutton(
                 callback: () {
+                  MySharedPreferences.prefs.clear();
                   showMyDialog(title: 'Logout', content: 'Are you sure you want to Logout?', confirmText: 'Logout');
                 },
                 context: 'Logout',
