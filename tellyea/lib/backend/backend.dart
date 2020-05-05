@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
 import 'package:TellYea/model/ThisUser.dart';
 
 import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 
 class Backend {
   static bool initialized = false;
@@ -111,5 +115,11 @@ class Backend {
     if (initialized == false) initialize();
 
     return Backendless.data.of(tableName).rt();
+  }
+
+  static Future<String> uploadImage({@required File image}) async {
+    if (initialized == false) initialize();
+
+    return await Backendless.files.upload(image, '/images/user_images/${ThisUser.ownerId}');
   }
 }

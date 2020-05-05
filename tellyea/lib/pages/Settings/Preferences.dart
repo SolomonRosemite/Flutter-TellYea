@@ -1,9 +1,13 @@
-import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:TellYea/backend/SharedPreferences.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class Save {
   static String bio;
@@ -22,12 +26,13 @@ class Save {
     @required String username,
   }) async {
     // Save to Database
-    var wait = Backend.update(
+    var wait = Backend.updateAsync(
         'TellYeaUsers',
         {
           'bio': bio,
           'colorScheme': colorScheme,
           'displayname': displayname,
+          'imageUrl': imageUrl,
           'username': username,
         },
         'ownerId =\'${ThisUser.ownerId}\'');
@@ -36,7 +41,7 @@ class Save {
     ThisUser.bio = bio;
     ThisUser.colorScheme = colorScheme;
     ThisUser.displayname = displayname;
-    //TODO ThisUser.imageUrl = imageUrl;
+    ThisUser.imageUrl = imageUrl;
     ThisUser.username = username;
 
     // TODO: Fetch new data
@@ -77,13 +82,28 @@ class _PreferencesState extends State<Preferences> {
     } else if (Save.displayname != ThisUser.displayname) {
       return false;
     } else if (Save.imageUrl != ThisUser.imageUrl) {
-      // TODO: Might not work yet
       return false;
     } else if (Save.username != ThisUser.username) {
       return false;
     }
 
     return true;
+  }
+
+  void saveImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
+
+    // Resize image
+    image = await FlutterNativeImage.compressImage(
+      image.path,
+      quality: 50,
+      percentage: 50,
+    );
+
+    Save.imageUrl = await Backend.uploadImage(image: image);
   }
 
   void closePage() => Navigator.of(context).pop();
@@ -216,7 +236,7 @@ class _PreferencesState extends State<Preferences> {
             ),
             SizedBox(height: 20),
             GestureDetector(
-              onTap: () => print('change pic'),
+              onTap: () => saveImage(),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.network(
@@ -229,9 +249,7 @@ class _PreferencesState extends State<Preferences> {
             ),
             SizedBox(height: 10),
             FlatButton(
-              onPressed: () {
-                print('Change Profile pic');
-              },
+              onPressed: () => saveImage(),
               child: Text(
                 'Change Profile Picture',
                 style: TextStyle(fontWeight: FontWeight.normal),

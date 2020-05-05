@@ -103,7 +103,6 @@ class _ExtraPreferencesPageState extends State<ExtraPreferencesPage> {
 
   void bioChanged(String bio) {
     if (bio.length == 0) {
-      // TODO: bio cant be empty
       setState(() {
         alertUser = 'Bio cant be empty';
         buttonColor = disabledColor;
@@ -159,7 +158,7 @@ class _ExtraPreferencesPageState extends State<ExtraPreferencesPage> {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       width: double.infinity,
-      height: maxLines == 1 ? 90 : 150,
+      height: maxLines == 1 ? 90 : 200,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
