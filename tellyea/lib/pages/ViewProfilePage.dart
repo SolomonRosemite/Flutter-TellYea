@@ -85,7 +85,6 @@ class ProfilePageState extends State<ProfilePage> {
                 Container(
                   color: Colors.white,
                   child: Row(
-                    // TODO: Icon funcs
                     children: <Widget>[
                       IconButton(icon: Icon(MdiIcons.messageDraw), onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
                       Expanded(
@@ -97,6 +96,7 @@ class ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+                      // TODO: Icon funcs
                       IconButton(
                         icon: Icon(MdiIcons.accountMultiplePlus),
                         onPressed: () {

@@ -82,7 +82,10 @@ class _ExtraPreferencesPageState extends State<ExtraPreferencesPage> {
     this.username = username;
   }
 
-  Future<bool> saveUsername() async {
+  Future<bool> usernameAvailable() async {
+    if (Save.username == username) {
+      return true;
+    }
     for (Map item in await Backend.readTable('TellYeaUsers')) {
       if (username.toLowerCase() == item['username'].toLowerCase()) {
         if (item['username'].toLowerCase() == ThisUser.username.toLowerCase()) {
@@ -201,7 +204,7 @@ class _ExtraPreferencesPageState extends State<ExtraPreferencesPage> {
             icon: new Icon(Icons.done, size: 25, color: buttonColor),
             onPressed: () async {
               if (alertUser == initialValue) {
-                if (await saveUsername()) {
+                if (await usernameAvailable()) {
                   Navigator.of(context).pop(null);
                   return;
                 }

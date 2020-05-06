@@ -107,7 +107,7 @@ class SplashState extends State<Splash> {
                     ),
                     RaisedButton(
                       elevation: 5.0,
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => buttonVisible ? Navigator.pop(context) : null,
                       padding: EdgeInsets.all(15.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),

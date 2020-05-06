@@ -48,7 +48,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     var yeetListener = Backend.initListener('Yeets');
     yeetListener.addCreateListener(addMessages);
 
-    var newYeetUserListener = Backend.initListener('Yeets');
+    // var updatedYeetListener = Backend.initListener('Yeets');
+    // updatedYeetListener.addUpdateListener(updateYeet);
+
+    var newYeetUserListener = Backend.initListener('TellYeaUsers');
     newYeetUserListener.addCreateListener(addUser);
 
     loadMessages();
@@ -101,6 +104,15 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     Yeets.yeetModels = this.yeetModels;
   }
 
+  void updateYeet(Map user) {
+    print('update');
+    for (var i = 0; i < yeetModels.length; i++) {
+      if (yeetModels[i].objectId == user['objectId'] && yeetModels[i].dateTime == user['dateTime']) {
+        print('here');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -134,10 +146,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
               // Page View 1: Profile
               new Container(
                 child: Center(
-                  // TODO: Helpful links for Later 'Images' to downscale...
-                  // https://pub.dev/packages/image_picker
-                  // https://stackoverflow.com/questions/49701654/how-can-i-read-from-disk-and-resize-an-image-in-flutter-dart
-
                   // TODO: Redesign 'Post YeetPage'
                   child: new ProfilePage(),
                 ),

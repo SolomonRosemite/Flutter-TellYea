@@ -7,7 +7,6 @@ import 'package:TellYea/model/ThisUser.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class Save {
   static String bio;
@@ -16,8 +15,6 @@ class Save {
   static String imageUrl;
   static String username;
 
-  // TODO: Add Image save here aswell
-  // TODO: Update Image Url
   static Future<void> save({
     @required String bio,
     @required String colorScheme,
@@ -63,7 +60,6 @@ class _PreferencesState extends State<Preferences> {
   @override
   void initState() {
     if (savedTemp != true) {
-      // TODO: Add a Listener on update
       Save.bio = ThisUser.bio;
       Save.colorScheme = ThisUser.colorScheme;
       Save.displayname = ThisUser.displayname;
@@ -208,7 +204,6 @@ class _PreferencesState extends State<Preferences> {
                   await Backend.updateAsync(
                       'Yeets',
                       {
-                        'bio': Save.bio,
                         'colorScheme': Save.colorScheme,
                         'displayname': Save.displayname,
                         'imageUrl': Save.imageUrl,
