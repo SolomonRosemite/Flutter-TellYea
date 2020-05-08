@@ -11,8 +11,6 @@ class Backend {
   static bool userLoaded = false;
   static bool userIsOffline = false;
 
-  static bool appLoaded = false;
-
   static List<Map> tellYeaUsers;
 
   static void initialize() {

@@ -32,10 +32,8 @@ Future<void> loginUser() async {
   // If the user has already logged in before.
   if (MySharedPreferences.getString('email') != null) {
     await Backend.loginUser(MySharedPreferences.getString('email'), MySharedPreferences.getString('password'));
-    Backend.appLoaded = true;
     return;
   }
-  Backend.appLoaded = true;
   loadLoginScreen = true;
 }
 
@@ -47,17 +45,6 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   static bool onPage = false;
   static bool loadedSplashScreen = false;
-
-  Widget a() {
-    FutureBuilder(
-        future: Future.delayed(Duration(milliseconds: 500)),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done)
-            return YeetListPage();
-          else
-            return Container();
-        });
-  }
 
   @override
   Widget build(BuildContext context) {

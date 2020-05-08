@@ -4,7 +4,6 @@ import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
-import 'common/theme.dart';
 
 class Splash extends StatefulWidget {
   static const String routeName = "/Splash";
