@@ -1,5 +1,6 @@
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/common/theme.dart';
 import 'package:flutter/material.dart';
 
 class YeetDetail extends StatefulWidget {
@@ -12,13 +13,21 @@ class YeetDetail extends StatefulWidget {
 }
 
 class YeetDetailState extends State<YeetDetail> {
+  Color colorScheme;
+  @override
+  void initState() {
+    super.initState();
+    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeet);
+    print("${widget.yeet.displayname}: $colorScheme");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.yeet.colorScheme,
+      backgroundColor: colorScheme,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: widget.yeet.colorScheme,
+        backgroundColor: colorScheme,
       ),
       body: Column(
         children: <Widget>[
@@ -29,10 +38,6 @@ class YeetDetailState extends State<YeetDetail> {
           ),
           Spacer(),
           SizedBox(height: 80.0),
-          // Text(
-          //   "Context",
-          //   style: TextStyle(color: Colors.blue, fontSize: 40),
-          // ),
         ],
       ),
     );

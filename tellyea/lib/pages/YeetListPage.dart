@@ -6,28 +6,27 @@ import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/model/Profile.dart';
+import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
+
 import 'dart:async';
 
-import '../common/theme.dart';
+import 'package:logger/logger.dart';
 
 class Yeets {
   static List<YeetModel> yeetModels = new List<YeetModel>();
 }
 
 class YeetListPage extends StatefulWidget {
-  static const String routeName = "/home";
-
   @override
   YeetListPageState createState() => YeetListPageState();
 }
 
 class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixin {
   List<YeetModel> yeetModels = new List<YeetModel>();
-  List<Map<dynamic, dynamic>> yeets = new List();
   int index = 0;
 
   String timeString = "";
@@ -48,11 +47,11 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     var yeetListener = Backend.initListener('Yeets');
     yeetListener.addCreateListener(addMessages);
 
-    // var updatedYeetListener = Backend.initListener('Yeets');
-    // updatedYeetListener.addUpdateListener(updateYeet);
-
     var newYeetUserListener = Backend.initListener('TellYeaUsers');
     newYeetUserListener.addCreateListener(addUser);
+
+    var updatedYeetUserListener = Backend.initListener('TellYeaUsers');
+    updatedYeetUserListener.addUpdateListener(updateUser);
 
     loadMessages();
 
@@ -62,8 +61,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   }
 
   void _getTime() {
-    final DateTime now = DateTime.now();
-    final String formattedDateTime = SmallFunctions.formatDateTime(now);
+    final String formattedDateTime = SmallFunctions.formatDateTime(DateTime.now());
     setState(() {
       timeString = formattedDateTime;
     });
@@ -73,42 +71,51 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
   void addMessages(Map map) {
     index += 1;
-    Color colorScheme;
-    switch (map["colorScheme"]) {
-      case "primaryColor":
-        colorScheme = ColorSchemes.primaryColor;
-        break;
-      case "red":
-        colorScheme = ColorSchemes.red;
-        break;
-    }
 
     setState(() {
-      yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), colorScheme: colorScheme, displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], objectId: map["objectId"]));
+      yeetModels.insert(0, new YeetModel(id: index.toString(), dateTime: DateTime.parse(map["dateTime"]), displayname: map["displayname"], username: map["username"], imageUrl: map["imageUrl"], message: map["message"], verified: map["verified"], ownerId: map["ownerId"]));
     });
-    Yeets.yeetModels = this.yeetModels;
+    Yeets.yeetModels = yeetModels;
   }
 
   void loadMessages() async {
     if (await Backend.hasInternet() == false) return;
+    var yeets = await Backend.readTable("Yeets");
+
+    yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
+
+    for (var i = 0; i < yeets.length; i++) {
+      yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], ownerId: yeets[i]["ownerId"]));
+      this.index = i;
+    }
+    Yeets.yeetModels = yeetModels;
+  }
+
+  Future<void> reloadAllMessages() async {
+    List<Map<dynamic, dynamic>> yeets = await Backend.readTable("Yeets");
+    List<YeetModel> yeetModelsTemp = new List<YeetModel>();
 
     // Added all yeets
     yeets = await Backend.readTable("Yeets");
     yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
 
     for (var i = 0; i < yeets.length; i++) {
-      Color colorScheme = ColorSchemes.colorSchemesToColor(yeets[i]["colorScheme"]);
-      yeetModels.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), colorScheme: colorScheme, displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], objectId: yeets[i]["objectId"]));
+      yeetModelsTemp.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], ownerId: yeets[i]["ownerId"]));
       this.index = i;
     }
-    Yeets.yeetModels = this.yeetModels;
+    setState(() {
+      yeetModels = yeetModelsTemp;
+      Yeets.yeetModels = yeetModelsTemp;
+    });
+    print('done');
   }
 
-  void updateYeet(Map user) {
-    print('update');
-    for (var i = 0; i < yeetModels.length; i++) {
-      if (yeetModels[i].objectId == user['objectId'] && yeetModels[i].dateTime == user['dateTime']) {
-        print('here');
+  void updateUser(Map user) {
+    print('hiiiiiiiii');
+    for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
+      if (Backend.tellYeaUsers[i]['ownerId'] == user['ownerId']) {
+        Backend.tellYeaUsers[i]['colorScheme'] = user['colorScheme'];
+        return;
       }
     }
   }
@@ -124,6 +131,15 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
           backgroundColor: Colors.white,
           appBar: AppBar(
             actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.update,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () async {
+                    await reloadAllMessages();
+                  }),
               IconButton(
                   icon: Icon(
                     Icons.settings,

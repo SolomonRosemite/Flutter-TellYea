@@ -14,13 +14,13 @@ import 'package:flutter/material.dart';
 bool loadLoginScreen = false;
 
 void main() {
+  loginUser();
   runApp(new MaterialApp(
     home: MyApp(),
   ));
-  loginUser();
 }
 
-void loginUser() async {
+Future<void> loginUser() async {
   if (await Backend.hasInternet() == false) {
     Backend.userIsOffline = true;
     return;
@@ -31,9 +31,11 @@ void loginUser() async {
 
   // If the user has already logged in before.
   if (MySharedPreferences.getString('email') != null) {
-    Backend.loginUser(MySharedPreferences.getString('email'), MySharedPreferences.getString('password'));
+    await Backend.loginUser(MySharedPreferences.getString('email'), MySharedPreferences.getString('password'));
+    Backend.appLoaded = true;
     return;
   }
+  Backend.appLoaded = true;
   loadLoginScreen = true;
 }
 
@@ -45,6 +47,17 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   static bool onPage = false;
   static bool loadedSplashScreen = false;
+
+  Widget a() {
+    FutureBuilder(
+        future: Future.delayed(Duration(milliseconds: 500)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done)
+            return YeetListPage();
+          else
+            return Container();
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +71,14 @@ class MyAppState extends State<MyApp> {
     };
     return MaterialApp(
       title: 'TellYea',
-      home: new YeetListPage(),
+      home: FutureBuilder(
+          future: Future.delayed(Duration(seconds: 2)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done)
+              return YeetListPage();
+            else
+              return Container(color: ColorSchemes.primaryColor);
+          }),
       color: ColorSchemes.primaryColor,
       routes: routes,
     );

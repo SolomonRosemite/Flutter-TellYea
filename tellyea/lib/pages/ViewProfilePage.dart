@@ -41,7 +41,7 @@ class ProfilePageState extends State<ProfilePage> {
   void loadYeets() {
     for (var i = 0; i < Yeets.yeetModels.length; i++) {
       if (Yeets.yeetModels[i].username == profile.username) {
-        yeetModels.add(new YeetModel(id: i.toString(), dateTime: Yeets.yeetModels[i].dateTime, colorScheme: Yeets.yeetModels[i].colorScheme, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified, objectId: Yeets.yeetModels[i].objectId));
+        yeetModels.add(new YeetModel(id: i.toString(), dateTime: Yeets.yeetModels[i].dateTime, ownerId: Yeets.yeetModels[i].ownerId, displayname: Yeets.yeetModels[i].displayname, username: Yeets.yeetModels[i].username, imageUrl: Yeets.yeetModels[i].imageUrl, message: Yeets.yeetModels[i].message, verified: Yeets.yeetModels[i].verified));
       }
     }
     yeetModels.sort((a, b) => a.dateTime.compareTo(b.dateTime));

@@ -1,22 +1,21 @@
-import 'dart:io';
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/credentials.dart';
 import 'package:TellYea/model/ThisUser.dart';
 
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
 class Backend {
   static bool initialized = false;
   static bool userLoaded = false;
   static bool userIsOffline = false;
 
+  static bool appLoaded = false;
+
   static List<Map> tellYeaUsers;
 
-  static void initialize() async {
+  static void initialize() {
     Backendless.setUrl('https://api.backendless.com');
     Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
     initialized = true;
@@ -42,7 +41,16 @@ class Backend {
         'displayname': displayName,
         'username': username
       });
-      ThisUser.loadData(ownerId: thisUser['ownerId'], colorScheme: 'primaryColor', created: DateTime.now(), bio: 'Hey, I\'m using TellYea', displayname: displayName, imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png', username: username, verified: false);
+      ThisUser.loadData(
+        ownerId: thisUser['ownerId'],
+        colorScheme: 'primaryColor',
+        created: DateTime.now(),
+        bio: 'Hey, I\'m using TellYea',
+        displayname: displayName,
+        imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png',
+        username: username,
+        verified: false,
+      );
       return true;
     } catch (e) {
       save("Reports", {
@@ -117,7 +125,7 @@ class Backend {
     return Backendless.data.of(tableName).rt();
   }
 
-  static Future<String> uploadImage({@required File image}) async {
+  static Future<String> uploadImage(File image) async {
     if (initialized == false) initialize();
 
     return await Backendless.files.upload(image, '/images/user_images/${ThisUser.ownerId}');

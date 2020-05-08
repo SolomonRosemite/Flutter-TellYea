@@ -5,6 +5,7 @@ import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/pages/ViewYeetPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,15 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
   static String bio;
   static DateTime created;
 
+  Color colorScheme;
+
+  @override
+  void initState() {
+    super.initState();
+    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel);
+    print("${widget.yeetModel.displayname}: $colorScheme");
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -32,7 +42,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Material(
-          color: widget.yeetModel.colorScheme,
+          color: colorScheme,
           elevation: 20,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           child: InkWell(
@@ -100,7 +110,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                     // Assign values to ProfilePageState.profile
                                     ProfilePageState.profile.bio = bio;
                                     ProfilePageState.profile.created = created;
-                                    ProfilePageState.profile.colorScheme = widget.yeetModel.colorScheme;
+                                    ProfilePageState.profile.colorScheme = colorScheme;
                                     ProfilePageState.profile.displayname = widget.yeetModel.displayname;
                                     ProfilePageState.profile.imageUrl = widget.yeetModel.imageUrl;
                                     ProfilePageState.profile.username = widget.yeetModel.username;

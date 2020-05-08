@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  logger: ^0.9.1
+
   intl: ^0.16.1
   after_layout: ^1.0.7
   cupertino_icons: ^0.1.2
@@ -20,7 +22,7 @@ dependencies:
   image_picker: ^0.6.6+1
   flutter_native_image: ^0.0.5
 
-  shared_preferences: ^0.5.6+3
+  shared_preferences: ^0.5.4
   material_design_icons_flutter: ^4.0.5145
 
 dev_dependencies:
