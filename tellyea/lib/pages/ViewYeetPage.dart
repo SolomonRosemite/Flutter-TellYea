@@ -18,7 +18,6 @@ class YeetDetailState extends State<YeetDetail> {
   void initState() {
     super.initState();
     colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeet);
-    print("${widget.yeet.displayname}: $colorScheme");
   }
 
   @override

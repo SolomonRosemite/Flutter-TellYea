@@ -117,6 +117,12 @@ class Backend {
     await Backendless.data.of(tableName).save(map);
   }
 
+  static void remove(String tableName, Map map) {
+    if (initialized == false) initialize();
+
+    Backendless.data.of(tableName).remove(entity: map);
+  }
+
   static EventHandler<Map<dynamic, dynamic>> initListener(String tableName) {
     if (initialized == false) initialize();
 

@@ -23,23 +23,35 @@ class Save {
     @required String imageUrl,
     @required String username,
   }) async {
-    // Save to Database
-    await Backend.updateAsync(
-        'TellYeaUsers',
-        {
-          'bio': bio,
-          'colorScheme': colorScheme,
-          'displayname': displayname,
-          'imageUrl': imageUrl,
-          'username': username,
-        },
-        'ownerId =\'${ThisUser.ownerId}\'');
-
     ThisUser.bio = bio;
     ThisUser.colorScheme = colorScheme;
     ThisUser.displayname = displayname;
     ThisUser.imageUrl = imageUrl;
     ThisUser.username = username;
+
+    // Save to Database
+    Backend.update(
+      'TellYeaUsers',
+      {
+        'bio': bio,
+        'colorScheme': colorScheme,
+        'displayname': displayname,
+        'imageUrl': imageUrl,
+        'username': username,
+      },
+      'ownerId =\'${ThisUser.ownerId}\'',
+    );
+
+    await Backend.saveAsync(
+      'TellYeaUsersUpdater',
+      {
+        'bio': bio,
+        'colorScheme': colorScheme,
+        'displayname': displayname,
+        'imageUrl': imageUrl,
+        'username': username,
+      },
+    );
   }
 }
 
@@ -89,7 +101,7 @@ class _PreferencesState extends State<Preferences> {
       return;
     }
 
-    // Resize image
+    // Compress Image
     image = await FlutterNativeImage.compressImage(
       image.path,
       quality: 50,
@@ -196,14 +208,15 @@ class _PreferencesState extends State<Preferences> {
                   );
 
                   // Update all Yeets made by this User
-                  await Backend.updateAsync(
-                      'Yeets',
-                      {
-                        'displayname': Save.displayname,
-                        'imageUrl': Save.imageUrl,
-                        'username': Save.username,
-                      },
-                      'ownerId = \'${ThisUser.ownerId}\'');
+                  Backend.update(
+                    'Yeets',
+                    {
+                      'displayname': Save.displayname,
+                      'imageUrl': Save.imageUrl,
+                      'username': Save.username,
+                    },
+                    'ownerId = \'${ThisUser.ownerId}\'',
+                  );
 
                   Navigator.of(context).pop();
                 }

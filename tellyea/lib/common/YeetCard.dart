@@ -29,7 +29,6 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
   void initState() {
     super.initState();
     colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel);
-    print("${widget.yeetModel.displayname}: $colorScheme");
   }
 
   @override

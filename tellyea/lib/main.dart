@@ -58,14 +58,7 @@ class MyAppState extends State<MyApp> {
     };
     return MaterialApp(
       title: 'TellYea',
-      home: FutureBuilder(
-          future: Future.delayed(Duration(seconds: 2)),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done)
-              return YeetListPage();
-            else
-              return Container(color: ColorSchemes.primaryColor);
-          }),
+      home: YeetListPage(),
       color: ColorSchemes.primaryColor,
       routes: routes,
     );

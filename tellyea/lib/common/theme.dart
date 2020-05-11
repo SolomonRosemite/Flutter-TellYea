@@ -11,7 +11,6 @@ class ColorSchemes {
   static Color getColorSchemeFromUser(YeetModel yeetModel) {
     for (var user in Backend.tellYeaUsers) {
       if (user['ownerId'] == yeetModel.ownerId) {
-        // print(user['colorScheme']);
         switch (user['colorScheme']) {
           case "primaryColor":
             return ColorSchemes.primaryColor;

@@ -1,3 +1,4 @@
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
@@ -6,15 +7,12 @@ import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/model/Profile.dart';
-import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/SplashScreen.dart';
+import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';
-
 import 'dart:async';
-
-import 'package:logger/logger.dart';
 
 class Yeets {
   static List<YeetModel> yeetModels = new List<YeetModel>();
@@ -44,14 +42,15 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       });
       tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
+
     var yeetListener = Backend.initListener('Yeets');
     yeetListener.addCreateListener(addMessages);
 
-    var newYeetUserListener = Backend.initListener('TellYeaUsers');
-    newYeetUserListener.addCreateListener(addUser);
+    var newUserListener = Backend.initListener('TellYeaUsers');
+    newUserListener.addCreateListener(addUser);
 
-    var updatedYeetUserListener = Backend.initListener('TellYeaUsers');
-    updatedYeetUserListener.addUpdateListener(updateUser);
+    var updateUserListener = Backend.initListener('TellYeaUsersUpdater');
+    updateUserListener.addCreateListener(updateUser);
 
     loadMessages();
 
@@ -91,12 +90,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     Yeets.yeetModels = yeetModels;
   }
 
-  Future<void> reloadAllMessages() async {
-    List<Map<dynamic, dynamic>> yeets = await Backend.readTable("Yeets");
+  void reloadAllMessages(List<Map> list) {
+    List<Map<dynamic, dynamic>> yeets = list;
     List<YeetModel> yeetModelsTemp = new List<YeetModel>();
 
-    // Added all yeets
-    yeets = await Backend.readTable("Yeets");
     yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
 
     for (var i = 0; i < yeets.length; i++) {
@@ -107,15 +104,30 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       yeetModels = yeetModelsTemp;
       Yeets.yeetModels = yeetModelsTemp;
     });
-    print('done');
   }
 
   void updateUser(Map user) {
-    print('hiiiiiiiii');
+    // for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
+    //   print('times $i');
+    //   Backend.tellYeaUsers[i]['colorScheme'] = user['colorScheme'];
+    // }
+    // print(user['colorScheme']);
+    // print('niceeeeeeeeeeee');
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       if (Backend.tellYeaUsers[i]['ownerId'] == user['ownerId']) {
+        Backend.tellYeaUsers[i]['bio'] = user['bio'];
         Backend.tellYeaUsers[i]['colorScheme'] = user['colorScheme'];
-        return;
+        Backend.tellYeaUsers[i]['displayname'] = user['displayname'];
+        Backend.tellYeaUsers[i]['imageUrl'] = user['imageUrl'];
+        Backend.tellYeaUsers[i]['username'] = user['username'];
+        Backend.tellYeaUsers[i]['verified'] = user['verified'];
+
+        if (Backend.tellYeaUsers[i]['ownerId'] == ThisUser.ownerId) {
+          Future.delayed(const Duration(seconds: 10), () {
+            Backend.remove('TellYeaUsersUpdater', user);
+          });
+        }
+        break;
       }
     }
   }
@@ -138,7 +150,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                     color: Colors.black,
                   ),
                   onPressed: () async {
-                    await reloadAllMessages();
+                    // await reloadAllMessages();// TODO
                   }),
               IconButton(
                   icon: Icon(

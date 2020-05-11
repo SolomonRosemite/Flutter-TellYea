@@ -10,19 +10,17 @@ dependencies:
   flutter:
     sdk: flutter
 
-  logger: ^0.9.1
-
   intl: ^0.16.1
-  after_layout: ^1.0.7
+  after_layout: ^1.0.7+2
   cupertino_icons: ^0.1.2
-  backendless_sdk: ^1.1.5
+  backendless_sdk: ^1.1.7
   flutter_socket_io: ^0.6.0
   data_connection_checker: ^0.3.4
 
   image_picker: ^0.6.6+1
   flutter_native_image: ^0.0.5
 
-  shared_preferences: ^0.5.4
+  shared_preferences: ^0.5.7+1
   material_design_icons_flutter: ^4.0.5145
 
 dev_dependencies:
