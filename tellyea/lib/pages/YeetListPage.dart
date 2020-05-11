@@ -131,7 +131,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       }
     }
     Yeets.yeetModels = yeetModels;
-    tabController.animateTo(0);
+
+    if (user['ownerId'] == ThisUser.ownerId) {
+      tabController.animateTo(0);
+    }
   }
 
   @override
