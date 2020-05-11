@@ -31,7 +31,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   bool visible = false;
 
   static TabController tabController;
-  static Profile profile;
 
   @override
   void initState() {
@@ -107,12 +106,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   }
 
   void updateUser(Map user) {
-    // for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
-    //   print('times $i');
-    //   Backend.tellYeaUsers[i]['colorScheme'] = user['colorScheme'];
-    // }
-    // print(user['colorScheme']);
-    // print('niceeeeeeeeeeee');
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       if (Backend.tellYeaUsers[i]['ownerId'] == user['ownerId']) {
         Backend.tellYeaUsers[i]['bio'] = user['bio'];
@@ -130,6 +123,15 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         break;
       }
     }
+    for (var i = 0; i < yeetModels.length; i++) {
+      if (yeetModels[i].ownerId == user['ownerId']) {
+        yeetModels[i].displayname = user['displayname'];
+        yeetModels[i].imageUrl = user['imageUrl'];
+        yeetModels[i].username = user['username'];
+      }
+    }
+    Yeets.yeetModels = yeetModels;
+    tabController.animateTo(0);
   }
 
   @override
@@ -143,15 +145,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
           backgroundColor: Colors.white,
           appBar: AppBar(
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.update,
-                    size: 20,
-                    color: Colors.black,
-                  ),
-                  onPressed: () async {
-                    // await reloadAllMessages();// TODO
-                  }),
               IconButton(
                   icon: Icon(
                     Icons.settings,

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
@@ -66,9 +69,12 @@ class _PreferencesState extends State<Preferences> {
   bool savedTemp = false;
   bool timeout = false;
 
+  String image;
+
   @override
   void initState() {
     if (savedTemp != true) {
+      image = ThisUser.imageUrl;
       Save.bio = ThisUser.bio;
       Save.colorScheme = ThisUser.colorScheme;
       Save.displayname = ThisUser.displayname;
@@ -101,14 +107,43 @@ class _PreferencesState extends State<Preferences> {
       return;
     }
 
+    var cropped = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      aspectRatioPresets: Platform.isAndroid
+          ? [
+              CropAspectRatioPreset.square
+            ]
+          : [
+              CropAspectRatioPreset.square
+            ],
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: 'Cropper',
+        toolbarColor: Colors.deepOrange,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+      ),
+      iosUiSettings: IOSUiSettings(
+        title: 'Cropper',
+      ),
+    );
+
+    if (cropped == null) return;
+
+    image = cropped;
+
     // Compress Image
     image = await FlutterNativeImage.compressImage(
       image.path,
-      quality: 50,
-      percentage: 50,
+      quality: 55,
+      percentage: 60,
     );
 
     Save.imageUrl = await Backend.uploadImage(image);
+
+    setState(() {
+      this.image = Save.imageUrl;
+    });
   }
 
   void closePage() => Navigator.of(context).pop();
@@ -236,13 +271,13 @@ class _PreferencesState extends State<Preferences> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 40),
             GestureDetector(
               onTap: () => saveImage(),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.network(
-                  ThisUser.imageUrl,
+                  image,
                   width: 120.0,
                   height: 120.0,
                   fit: BoxFit.cover,
