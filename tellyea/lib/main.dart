@@ -27,6 +27,7 @@ Future<void> loginUser() async {
   }
   await MySharedPreferences.initialize();
 
+  await Backend.initialize();
   Backend.tellYeaUsers = await Backend.readTable('TellYeaUsers');
 
   // If the user has already logged in before.

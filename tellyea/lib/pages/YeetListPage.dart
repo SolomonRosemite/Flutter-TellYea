@@ -1,12 +1,13 @@
-import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/pages/Settings/Preferences.dart';
+import 'package:backendless_sdk/backendless_sdk.dart';
+import 'package:TellYea/pages/Chat/ChatViewPage.dart';
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
-import 'package:TellYea/model/Profile.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
@@ -32,6 +33,14 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
   static TabController tabController;
 
+  // Listener
+  bool assigned = false;
+
+  EventHandler<Map<dynamic, dynamic>> yeetListener;
+  EventHandler<Map<dynamic, dynamic>> newUserListener;
+  EventHandler<Map<dynamic, dynamic>> updateUserListener;
+  EventHandler<Map<dynamic, dynamic>> messageListener;
+
   @override
   void initState() {
     if (MyAppState.loadedSplashScreen == false) {
@@ -42,23 +51,30 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
 
-    var yeetListener = Backend.initListener('Yeets');
-    yeetListener.addCreateListener(addMessages);
-
-    var newUserListener = Backend.initListener('TellYeaUsers');
-    newUserListener.addCreateListener(addUser);
-
-    var updateUserListener = Backend.initListener('TellYeaUsersUpdater');
-    updateUserListener.addCreateListener(updateUser);
-
-    loadMessages();
-
     timeString = SmallFunctions.formatDateTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     super.initState();
   }
 
   void _getTime() {
+    if (assigned == false && Backend.userLoaded) {
+      assigned = true;
+
+      yeetListener = Backend.initListener('Yeets');
+      yeetListener.addCreateListener(addMessages);
+
+      newUserListener = Backend.initListener('TellYeaUsers');
+      newUserListener.addCreateListener(addUser);
+
+      updateUserListener = Backend.initListener('TellYeaUsersUpdater');
+      updateUserListener.addCreateListener(updateUser);
+
+      messageListener = Backend.initListener('Messages');
+      messageListener.addCreateListener(newMessage);
+
+      loadMessages();
+    }
+
     final String formattedDateTime = SmallFunctions.formatDateTime(DateTime.now());
     setState(() {
       timeString = formattedDateTime;
@@ -137,6 +153,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
   }
 
+  void newMessage(Map message) {
+    print('haha');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -185,11 +205,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                 ),
               ),
               // Page View 3: Direct Message and Friends
-              new Container(
-                child: Center(
-                  child: Text("Direct Message and Friends"),
-                ),
-              ),
+              new ChatViewPage(),
             ],
           ),
           bottomNavigationBar: new TabBar(

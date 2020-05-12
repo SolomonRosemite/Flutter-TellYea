@@ -13,9 +13,9 @@ class Backend {
 
   static List<Map> tellYeaUsers;
 
-  static void initialize() {
-    Backendless.setUrl('https://api.backendless.com');
-    Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
+  static Future<void> initialize() async {
+    await Backendless.setUrl('https://api.backendless.com');
+    await Backendless.initApp(Credentials.applicationId, Credentials.androidApiKey, Credentials.iosApiKey);
     initialized = true;
   }
 
@@ -24,8 +24,6 @@ class Backend {
   }
 
   static Future<bool> registerUser(String displayName, String username, String email, String password) async {
-    if (initialized == false) initialize();
-
     try {
       BackendlessUser user = new BackendlessUser();
       user.email = email;
@@ -59,8 +57,6 @@ class Backend {
   }
 
   static Future<bool> loginUser(String email, String password) async {
-    if (initialized == false) initialize();
-
     try {
       await Backendless.userService.login(email, password);
       try {
@@ -81,8 +77,6 @@ class Backend {
   }
 
   static Future<List<Map<dynamic, dynamic>>> readTable(String tableName, {String whereClause}) async {
-    if (initialized == false) initialize();
-
     int count = await Backendless.data.of(tableName).getObjectCount();
     DataQueryBuilder queryBuilder = DataQueryBuilder()..pageSize = count;
 
@@ -94,44 +88,30 @@ class Backend {
   }
 
   static void update(String tableName, Map<String, dynamic> map, String condition) {
-    if (initialized == false) initialize();
-
     Backendless.data.of(tableName).update(condition, map);
   }
 
   static Future<void> updateAsync(String tableName, Map<String, dynamic> map, String condition) async {
-    if (initialized == false) initialize();
-
     await Backendless.data.of(tableName).update(condition, map);
   }
 
   static void save(String tableName, Map<String, dynamic> map) {
-    if (initialized == false) initialize();
-
     Backendless.data.of(tableName).save(map);
   }
 
   static Future<void> saveAsync(String tableName, Map<String, dynamic> map) async {
-    if (initialized == false) initialize();
-
     await Backendless.data.of(tableName).save(map);
   }
 
   static void remove(String tableName, Map map) {
-    if (initialized == false) initialize();
-
     Backendless.data.of(tableName).remove(entity: map);
   }
 
   static EventHandler<Map<dynamic, dynamic>> initListener(String tableName) {
-    if (initialized == false) initialize();
-
     return Backendless.data.of(tableName).rt();
   }
 
   static Future<String> uploadImage(File image) async {
-    if (initialized == false) initialize();
-
     return await Backendless.files.upload(image, '/images/user_images/${ThisUser.ownerId}');
   }
 }
