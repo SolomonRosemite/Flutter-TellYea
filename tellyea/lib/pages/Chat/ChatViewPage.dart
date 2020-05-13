@@ -1,31 +1,29 @@
+import 'package:eventhandler/eventhandler.dart';
 import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
+import 'package:TellYea/common/events.dart';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class ChatViewPage extends StatefulWidget {
   @override
-  _ChatViewPageState createState() => _ChatViewPageState();
+  ChatViewPageState createState() => ChatViewPageState();
 }
 
-class _ChatViewPageState extends State<ChatViewPage> {
-  Timer timer;
-
+class ChatViewPageState extends State<ChatViewPage> {
   @override
   void initState() {
+    EventHandler().subscribe(newMessage);
     super.initState();
-
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateMessages());
   }
 
-  void updateMessages() {
-    print('test');
+  void newMessage(NewMessage item) {
+    print('new Message');
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    EventHandler().unsubscribe(newMessage);
     super.dispose();
   }
 
@@ -44,7 +42,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
                 onPressed: () => Backend.save('Messages', {
                   'test': 'by: ${ThisUser.username}'
                 }),
-                // onPressed: () => print('message send'),
                 child: Text('Send Test Message'),
               ),
             ),

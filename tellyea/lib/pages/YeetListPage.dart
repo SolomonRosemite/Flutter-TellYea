@@ -7,10 +7,14 @@ import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/model/Message.dart';
 import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
+
+import 'package:eventhandler/eventhandler.dart' as event;
+import 'package:TellYea/common/events.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -41,6 +45,8 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   EventHandler<Map<dynamic, dynamic>> updateUserListener;
   EventHandler<Map<dynamic, dynamic>> messageListener;
 
+  List<Message> messages = new List<Message>();
+
   @override
   void initState() {
     if (MyAppState.loadedSplashScreen == false) {
@@ -61,7 +67,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       assigned = true;
 
       yeetListener = Backend.initListener('Yeets');
-      yeetListener.addCreateListener(addMessages);
+      yeetListener.addCreateListener(addYeet);
 
       newUserListener = Backend.initListener('TellYeaUsers');
       newUserListener.addCreateListener(addUser);
@@ -70,9 +76,9 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       updateUserListener.addCreateListener(updateUser);
 
       messageListener = Backend.initListener('Messages');
-      messageListener.addCreateListener(newMessage);
+      messageListener.addCreateListener(addMessage);
 
-      loadMessages();
+      loadYeets();
     }
 
     final String formattedDateTime = SmallFunctions.formatDateTime(DateTime.now());
@@ -83,7 +89,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
   void addUser(Map user) => Backend.tellYeaUsers.add(user);
 
-  void addMessages(Map map) {
+  void addYeet(Map map) {
     index += 1;
 
     setState(() {
@@ -92,7 +98,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     Yeets.yeetModels = yeetModels;
   }
 
-  void loadMessages() async {
+  void loadYeets() async {
     if (await Backend.hasInternet() == false) return;
     var yeets = await Backend.readTable("Yeets");
 
@@ -105,7 +111,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     Yeets.yeetModels = yeetModels;
   }
 
-  void reloadAllMessages(List<Map> list) {
+  void reloadAllYeets(List<Map> list) {
     List<Map<dynamic, dynamic>> yeets = list;
     List<YeetModel> yeetModelsTemp = new List<YeetModel>();
 
@@ -153,8 +159,9 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
   }
 
-  void newMessage(Map message) {
-    print('haha');
+  void addMessage(Map message) {
+    var newMessage = NewMessage()..map = message;
+    event.EventHandler().send(newMessage);
   }
 
   @override
