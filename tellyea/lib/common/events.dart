@@ -1,5 +1,6 @@
 import 'package:eventhandler/eventhandler.dart';
+import 'package:TellYea/model/Message.dart';
 
 class NewMessage extends EventBase {
-  Map map;
+  Message message;
 }

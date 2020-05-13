@@ -49,13 +49,16 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
   @override
   void initState() {
+    tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     if (MyAppState.loadedSplashScreen == false) {
       Future.delayed(const Duration(milliseconds: 0), () {
         Navigator.pushNamed(context, Splash.routeName);
         visible = true;
       });
-      tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     }
+
+    // Fetch data
+    loadYeets();
 
     timeString = SmallFunctions.formatDateTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
@@ -77,8 +80,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
       messageListener = Backend.initListener('Messages');
       messageListener.addCreateListener(addMessage);
-
-      loadYeets();
     }
 
     final String formattedDateTime = SmallFunctions.formatDateTime(DateTime.now());
@@ -159,9 +160,18 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
   }
 
-  void addMessage(Map message) {
-    var newMessage = NewMessage()..map = message;
-    event.EventHandler().send(newMessage);
+  void addMessage(Map newMessage) {
+    var nw = NewMessage();
+    nw.message = new Message(
+      chatID: newMessage['chatID'],
+      dateTime: newMessage['dateTime'],
+      message: newMessage['message'],
+      messageSeen: newMessage['messageSeen'],
+      receiver: newMessage['receiver'],
+      sender: newMessage['sender'],
+    );
+
+    event.EventHandler().send(nw);
   }
 
   @override

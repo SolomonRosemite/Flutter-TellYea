@@ -214,6 +214,10 @@ class _PreferencesState extends State<Preferences> {
         leading: new IconButton(
             icon: new Icon(Icons.close, size: 25, color: Colors.red[300]),
             onPressed: () {
+              if (noChange() == true) {
+                Navigator.of(context).pop(null);
+                return;
+              }
               showMyDialog();
             }),
         title: Text(
