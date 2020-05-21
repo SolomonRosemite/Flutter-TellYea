@@ -2,8 +2,6 @@ import 'package:TellYea/backend/Backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:flutter/material.dart';
 
-//TODO: Add one main Font
-
 class ColorSchemes {
   static const Color primaryColor = Color(0xFF3F47F4);
   static const Color red = Colors.red;

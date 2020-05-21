@@ -133,7 +133,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                             ),
                             Column(
                               children: <Widget>[
-                                SizedBox(height: 2.0),
+                                SizedBox(height: 1.0),
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
@@ -149,19 +149,21 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        SizedBox(height: 5.0),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Spacer(flex: 1),
-                            Spacer(flex: 1000),
-                            Text(
-                              SmallFunctions.formatDateTimeDayMonthTime(widget.yeetModel.dateTime),
-                              style: TextStyle(color: Colors.white),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(
+                                  SmallFunctions.formatDateTimeDayMonthTime(widget.yeetModel.dateTime),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
-                            Spacer(flex: 1),
                           ],
                         ),
                       ],

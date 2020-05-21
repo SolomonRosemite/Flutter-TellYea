@@ -1,8 +1,8 @@
 import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:TellYea/pages/Chat/ChatViewPage.dart';
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
+import 'package:TellYea/pages/FollowingPage.dart';
 import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/backend/Backend.dart';
@@ -12,9 +12,6 @@ import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
-
-import 'package:eventhandler/eventhandler.dart' as event;
-import 'package:TellYea/common/events.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -57,7 +54,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       });
     }
 
-    // Fetch data
     loadYeets();
 
     timeString = SmallFunctions.formatDateTime(DateTime.now());
@@ -77,9 +73,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
       updateUserListener = Backend.initListener('TellYeaUsersUpdater');
       updateUserListener.addCreateListener(updateUser);
-
-      messageListener = Backend.initListener('Messages');
-      messageListener.addCreateListener(addMessage);
     }
 
     final String formattedDateTime = SmallFunctions.formatDateTime(DateTime.now());
@@ -160,20 +153,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
   }
 
-  void addMessage(Map newMessage) {
-    var nw = NewMessage();
-    nw.message = new Message(
-      chatID: newMessage['chatID'],
-      dateTime: newMessage['dateTime'],
-      message: newMessage['message'],
-      messageSeen: newMessage['messageSeen'],
-      receiver: newMessage['receiver'],
-      sender: newMessage['sender'],
-    );
-
-    event.EventHandler().send(nw);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -207,11 +186,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
               // Page View 1: Profile
               new Container(
                 child: Center(
-                  // TODO: Redesign 'Post YeetPage'
                   child: new ProfilePage(),
                 ),
               ),
-              // Page View 2: Main YeetList
+              // Page View 2: YeetList
               new Container(
                 child: ListView.builder(
                   itemCount: yeetModels.length,
@@ -221,8 +199,8 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                   },
                 ),
               ),
-              // Page View 3: Direct Message and Friends
-              new ChatViewPage(),
+              // Page View 3: Followers & Following
+              new FollowingPage(),
             ],
           ),
           bottomNavigationBar: new TabBar(
