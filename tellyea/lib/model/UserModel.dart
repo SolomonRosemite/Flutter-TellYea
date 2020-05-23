@@ -11,7 +11,7 @@ class UserModel extends Profile {
     bool verified,
     String username,
     String ownerId,
-    List<String> following,
+    String following,
   }) : super.fromProfile(
           bio,
           colorScheme,
@@ -21,9 +21,10 @@ class UserModel extends Profile {
           verified,
           username,
         ) {
+    this.ownerId = ownerId;
     this.following = following;
   }
 
-  List<String> following;
+  String following;
   String ownerId;
 }

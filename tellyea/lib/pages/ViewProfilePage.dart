@@ -3,6 +3,7 @@ import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/common/YeetCard.dart';
 import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/model/Profile.dart';
@@ -30,6 +31,7 @@ class ProfilePageState extends State<ProfilePage> {
       profile.displayname = ThisUser.displayname;
       profile.imageUrl = ThisUser.imageUrl;
       profile.username = ThisUser.username;
+      profile.ownerId = ThisUser.ownerId;
       profile.verified = ThisUser.verified;
       loadYeets();
       return;
@@ -59,6 +61,33 @@ class ProfilePageState extends State<ProfilePage> {
           style: TextStyle(color: Colors.white),
         ));
     return new Column(children: list);
+  }
+
+  void updateFollowingList() {
+    Backend.update(
+      'TellYeaUsers',
+      {
+        'bio': ThisUser.bio,
+        'colorScheme': ThisUser.colorScheme,
+        'displayname': ThisUser.displayname,
+        'following': ThisUser.following,
+        'imageUrl': ThisUser.imageUrl,
+        'username': ThisUser.username,
+      },
+      'ownerId =\'${ThisUser.ownerId}\'',
+    );
+
+    Backend.save(
+      'TellYeaUsersUpdater',
+      {
+        'bio': ThisUser.bio,
+        'colorScheme': ThisUser.colorScheme,
+        'displayname': ThisUser.displayname,
+        'following': ThisUser.following,
+        'imageUrl': ThisUser.imageUrl,
+        'username': ThisUser.username,
+      },
+    );
   }
 
   @override
@@ -96,13 +125,35 @@ class ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-                      // TODO: Icon funcs
-                      IconButton(
-                        icon: Icon(MdiIcons.accountMultiplePlus),
-                        onPressed: () {
-                          print('test');
-                        },
-                      ),
+                      (profile.ownerId != ThisUser.ownerId)
+                          ? (!ThisUser.following.contains(profile.ownerId))
+                              ? IconButton(
+                                  icon: Icon(MdiIcons.accountMultiplePlus),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (ThisUser.following.length == 0) {
+                                        ThisUser.following += profile.ownerId;
+                                      } else {
+                                        ThisUser.following += ',' + profile.ownerId;
+                                      }
+                                    });
+                                    updateFollowingList();
+                                  },
+                                )
+                              : IconButton(
+                                  icon: Icon(MdiIcons.accountMultipleRemove),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (!ThisUser.following.contains(',')) {
+                                        ThisUser.following = '';
+                                      } else {
+                                        ThisUser.following = ThisUser.following.replaceFirst(yeetModels.first.ownerId, '');
+                                      }
+                                    });
+                                    updateFollowingList();
+                                  },
+                                )
+                          : SizedBox.shrink(),
                       SizedBox(width: 5),
                     ],
                   ),

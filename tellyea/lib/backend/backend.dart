@@ -44,6 +44,7 @@ class Backend {
         bio: 'Hey, I\'m using TellYea',
         displayname: displayName,
         imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png',
+        following: '',
         username: username,
         verified: false,
       );
@@ -62,7 +63,17 @@ class Backend {
       try {
         DataQueryBuilder queryBuilder = DataQueryBuilder()..whereClause = 'email = \'$email\'';
         Map user = await (Backendless.data.of('TellYeaUsers').find(queryBuilder)).then((onValue) => onValue[0]);
-        ThisUser.loadData(ownerId: user['ownerId'], colorScheme: user['colorScheme'], created: user['created'], bio: user['bio'], displayname: user['displayname'], imageUrl: user['imageUrl'], username: user['username'], verified: user['verified']);
+        ThisUser.loadData(
+          ownerId: user['ownerId'],
+          colorScheme: user['colorScheme'],
+          created: user['created'],
+          bio: user['bio'],
+          following: (user['following'] != null) ? user['following'] : '',
+          displayname: user['displayname'],
+          imageUrl: user['imageUrl'],
+          username: user['username'],
+          verified: user['verified'],
+        );
       } catch (e) {
         save("Reports", {
           "context": e.toString()

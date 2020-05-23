@@ -1,8 +1,11 @@
 import 'package:TellYea/common/ProfileCard.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/model/UserModel.dart';
 import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:flutter/material.dart';
+
+enum FollowMode { followers, following }
 
 class FollowingPage extends StatefulWidget {
   @override
@@ -18,8 +21,9 @@ class _FollowingPageState extends State<FollowingPage> {
   @override
   void initState() {
     // Demo
-    followers.addAll(getUsers());
-    following.addAll(getUsers());
+    var users = getUsers();
+    followers.addAll(splitFollowers(users));
+    following.addAll(loadMyFollows(users));
     super.initState();
   }
 
@@ -32,7 +36,7 @@ class _FollowingPageState extends State<FollowingPage> {
         colorScheme: ColorSchemes.colorSchemesToColor(Backend.tellYeaUsers[i]['colorScheme']),
         created: Backend.tellYeaUsers[i]['created'],
         displayname: Backend.tellYeaUsers[i]['displayname'],
-        following: getFollowers(i),
+        following: Backend.tellYeaUsers[i]['following'],
         imageUrl: Backend.tellYeaUsers[i]['imageUrl'],
         username: Backend.tellYeaUsers[i]['username'],
         verified: Backend.tellYeaUsers[i]['verified'],
@@ -43,25 +47,27 @@ class _FollowingPageState extends State<FollowingPage> {
     return users;
   }
 
-  List<String> getFollowers(int index) {
-    List<String> followers = new List<String>();
+  List<UserModel> splitFollowers(List<UserModel> list) {
+    List<UserModel> usersList = new List();
 
-    if (Backend.tellYeaUsers[index]['following'] == null) {
-      return followers;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].following == null) continue;
+
+      if (list[i].following.contains(ThisUser.ownerId)) {
+        usersList.add(list[i]);
+      }
     }
 
-    if (Backend.tellYeaUsers[index]['following'].toString().length == 0) {
-      return followers;
+    return usersList;
+  }
+
+  List<UserModel> loadMyFollows(List<UserModel> list) {
+    for (var i = 0; i < list.length; i++) {
+      if (!ThisUser.following.contains(list[i].ownerId)) {
+        list.removeAt(i--);
+      }
     }
-
-    if (Backend.tellYeaUsers[index]['following'].toString().contains(',')) {
-      followers = Backend.tellYeaUsers[index]['following'].toString().trim().split(',');
-      return followers;
-    }
-
-    followers.add(Backend.tellYeaUsers[index]['following']);
-
-    return followers;
+    return list;
   }
 
   Widget followersWidget() {
@@ -75,7 +81,7 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget followingWidget() {
     List<Widget> list = new List<Widget>();
     for (var i = following.length - 1; 0 <= i; i--) {
-      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
+      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: following[i])));
     }
     return new Column(children: list);
   }
@@ -96,9 +102,7 @@ class _FollowingPageState extends State<FollowingPage> {
                   children: <Widget>[
                     FlatButton(
                       onPressed: () {
-                        setState(() {
-                          showFollowers = true;
-                        });
+                        setState(() => showFollowers = true);
                       },
                       child: Text(
                         'Followers',
@@ -112,9 +116,7 @@ class _FollowingPageState extends State<FollowingPage> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        setState(() {
-                          showFollowers = false;
-                        });
+                        setState(() => showFollowers = false);
                       },
                       child: Text(
                         'Following',

@@ -16,6 +16,7 @@ class Save {
   static String bio;
   static String colorScheme;
   static String displayname;
+  static String following;
   static String imageUrl;
   static String username;
 
@@ -23,6 +24,7 @@ class Save {
     @required String bio,
     @required String colorScheme,
     @required String displayname,
+    @required String following,
     @required String imageUrl,
     @required String username,
   }) async {
@@ -39,6 +41,7 @@ class Save {
         'bio': bio,
         'colorScheme': colorScheme,
         'displayname': displayname,
+        'following': following,
         'imageUrl': imageUrl,
         'username': username,
       },
@@ -51,6 +54,7 @@ class Save {
         'bio': bio,
         'colorScheme': colorScheme,
         'displayname': displayname,
+        'following': following,
         'imageUrl': imageUrl,
         'username': username,
       },
@@ -78,6 +82,7 @@ class _PreferencesState extends State<Preferences> {
       Save.bio = ThisUser.bio;
       Save.colorScheme = ThisUser.colorScheme;
       Save.displayname = ThisUser.displayname;
+      Save.following = ThisUser.following;
       Save.imageUrl = ThisUser.imageUrl;
       Save.username = ThisUser.username;
       savedTemp = true;
@@ -241,6 +246,7 @@ class _PreferencesState extends State<Preferences> {
                   await Save.save(
                     bio: Save.bio,
                     colorScheme: Save.colorScheme,
+                    following: Save.following,
                     displayname: Save.displayname,
                     imageUrl: Save.imageUrl,
                     username: Save.username,

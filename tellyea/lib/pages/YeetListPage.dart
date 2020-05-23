@@ -121,11 +121,13 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   }
 
   void updateUser(Map user) {
+    print('new item: '+ user['following']);
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       if (Backend.tellYeaUsers[i]['ownerId'] == user['ownerId']) {
         Backend.tellYeaUsers[i]['bio'] = user['bio'];
         Backend.tellYeaUsers[i]['colorScheme'] = user['colorScheme'];
         Backend.tellYeaUsers[i]['displayname'] = user['displayname'];
+        Backend.tellYeaUsers[i]['following'] = user['following'];
         Backend.tellYeaUsers[i]['imageUrl'] = user['imageUrl'];
         Backend.tellYeaUsers[i]['username'] = user['username'];
         Backend.tellYeaUsers[i]['verified'] = user['verified'];

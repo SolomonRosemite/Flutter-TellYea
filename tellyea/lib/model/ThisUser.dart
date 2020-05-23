@@ -5,6 +5,7 @@ class ThisUser {
   static DateTime created;
   static String colorScheme;
   static String displayname;
+  static String following;
   static String imageUrl;
   static String ownerId;
   static String username;
@@ -15,15 +16,17 @@ class ThisUser {
     @required DateTime created,
     @required String bio,
     @required String colorScheme,
-    @required String username,
+    @required String following,
+    @required String ownerId,
     @required String imageUrl,
     @required bool verified,
-    @required String ownerId,
+    @required String username,
   }) {
     ThisUser.bio = bio;
     ThisUser.created = created;
     ThisUser.colorScheme = colorScheme;
     ThisUser.displayname = displayname;
+    ThisUser.following = following;
     ThisUser.imageUrl = imageUrl;
     ThisUser.username = username;
     ThisUser.verified = verified;

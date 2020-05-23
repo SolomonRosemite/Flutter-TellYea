@@ -27,8 +27,8 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
 
   @override
   void initState() {
-    super.initState();
     colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel.ownerId);
+    super.initState();
   }
 
   @override
@@ -113,6 +113,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                     ProfilePageState.profile.displayname = widget.yeetModel.displayname;
                                     ProfilePageState.profile.imageUrl = widget.yeetModel.imageUrl;
                                     ProfilePageState.profile.username = widget.yeetModel.username;
+                                    ProfilePageState.profile.ownerId = widget.yeetModel.ownerId;
                                     ProfilePageState.profile.verified = widget.yeetModel.verified;
 
                                     // Move over the Profile page

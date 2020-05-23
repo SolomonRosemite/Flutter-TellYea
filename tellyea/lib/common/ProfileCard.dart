@@ -42,6 +42,7 @@ class ProfileCardWidgetState extends State<ProfileCardWidget> {
     ProfilePageState.profile.displayname = widget.profileModel.displayname;
     ProfilePageState.profile.imageUrl = widget.profileModel.imageUrl;
     ProfilePageState.profile.username = widget.profileModel.username;
+    ProfilePageState.profile.ownerId = widget.profileModel.ownerId;
     ProfilePageState.profile.verified = widget.profileModel.verified;
 
     // Move over the Profile page
