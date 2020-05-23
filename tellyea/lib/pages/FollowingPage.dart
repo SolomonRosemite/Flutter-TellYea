@@ -9,7 +9,7 @@ class FollowingPage extends StatefulWidget {
 }
 
 class _FollowingPageState extends State<FollowingPage> {
-  bool showFollowers = false;
+  bool showFollowers = true;
 
   List<UserModel> followers = new List();
   List<UserModel> following = new List();
@@ -17,14 +17,22 @@ class _FollowingPageState extends State<FollowingPage> {
   @override
   void initState() {
     // Demo
-    followers.addAll(getUsers());
+    followers.add(new UserModel(username: 'followers'));
+    followers.add(new UserModel(username: 'followers'));
+    followers.add(new UserModel(username: 'followers'));
+    following.add(new UserModel(username: 'following'));
+    following.add(new UserModel(username: 'following'));
+    following.add(new UserModel(username: 'following'));
+    // followers.addAll(getUsers());
     // following.add(value);
     super.initState();
   }
 
   List<UserModel> getUsers() {
     List<UserModel> users = new List<UserModel>();
+    print('object');
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
+      print('object2');
       users.add(new UserModel(
         bio: Backend.tellYeaUsers[i]['bio'],
         colorSchemem: ColorSchemes.colorSchemesToColor(Backend.tellYeaUsers[i]['colorSchemem']),
@@ -41,27 +49,19 @@ class _FollowingPageState extends State<FollowingPage> {
   }
 
   Widget followersWidget() {
-    return Container(
-      child: ListView.builder(
-        itemCount: followers.length,
-        padding: EdgeInsets.only(top: 20),
-        itemBuilder: (context, index) {
-          return Text("Hi");
-        },
-      ),
-    );
+    List<Widget> list = new List<Widget>();
+    for (var i = followers.length - 1; 0 <= i; i--) {
+      list.add(new Text(followers[i].username));
+    }
+    return new Column(children: list);
   }
 
   Widget followingWidget() {
-    return Container(
-      child: ListView.builder(
-        itemCount: following.length,
-        padding: EdgeInsets.only(top: 20),
-        itemBuilder: (context, index) {
-          return Text("Hi");
-        },
-      ),
-    );
+    List<Widget> list = new List<Widget>();
+    for (var i = following.length - 1; 0 <= i; i--) {
+      list.add(new Text(following[i].username));
+    }
+    return new Column(children: list);
   }
 
   @override
@@ -75,32 +75,44 @@ class _FollowingPageState extends State<FollowingPage> {
           child: Container(
             child: Column(
               children: <Widget>[
-                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          showFollowers = true;
+                        });
+                      },
                       child: Text(
                         'Followers',
                         style: TextStyle(
                           color: Colors.black,
+                          fontSize: 17.5,
+                          fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
                     FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          showFollowers = false;
+                        });
+                      },
                       child: Text(
                         'Following',
                         style: TextStyle(
                           color: Colors.black,
+                          fontSize: 17.5,
+                          fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
                   ],
                 ),
+                SizedBox(height: 40),
                 (showFollowers == true) ? followersWidget() : followingWidget(),
               ],
             ),
