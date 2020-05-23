@@ -4,7 +4,7 @@ import 'Profile.dart';
 class UserModel extends Profile {
   UserModel({
     String bio,
-    Color colorSchemem,
+    Color colorScheme,
     DateTime created,
     String displayname,
     String imageUrl,
@@ -14,7 +14,7 @@ class UserModel extends Profile {
     List<String> following,
   }) : super.fromProfile(
           bio,
-          colorSchemem,
+          colorScheme,
           created,
           displayname,
           imageUrl,

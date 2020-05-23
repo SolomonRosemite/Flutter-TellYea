@@ -196,6 +196,7 @@ class ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             yeetModels.length != 0 ? heroWidgets() : SizedBox.shrink(),
+                            SizedBox(height: 65),
                           ],
                         ),
                       ),

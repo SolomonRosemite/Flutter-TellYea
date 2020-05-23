@@ -6,7 +6,6 @@ class ColorSchemes {
   static const Color red = Colors.red;
 
   static Color getColorSchemeFromUser(String ownerId) {
-    print(Backend.tellYeaUsers.length);
     for (var user in Backend.tellYeaUsers) {
       if (user['ownerId'] == ownerId) {
         switch (user['colorScheme']) {

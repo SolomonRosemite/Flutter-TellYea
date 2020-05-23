@@ -24,7 +24,7 @@ class ProfileCardWidgetState extends State<ProfileCardWidget> {
   @override
   void initState() {
     super.initState();
-    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.profileModel.ownerId);
+    colorScheme = widget.profileModel.colorScheme;
   }
 
   void navToUser() {

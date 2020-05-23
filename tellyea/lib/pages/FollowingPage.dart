@@ -18,27 +18,21 @@ class _FollowingPageState extends State<FollowingPage> {
   @override
   void initState() {
     // Demo
-    print(Backend.tellYeaUsers == null);
-    followers.add(new UserModel(username: 'followers'));
-    followers.add(new UserModel(username: 'followers'));
-    followers.add(new UserModel(username: 'followers'));
-    following.add(new UserModel(username: 'following'));
-    following.add(new UserModel(username: 'following'));
-    following.add(new UserModel(username: 'following'));
-    // followers.addAll(getUsers());
-    // following.add(value);
+    followers.addAll(getUsers());
+    following.addAll(getUsers());
     super.initState();
   }
 
   List<UserModel> getUsers() {
     List<UserModel> users = new List<UserModel>();
+
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       users.add(new UserModel(
         bio: Backend.tellYeaUsers[i]['bio'],
-        colorSchemem: ColorSchemes.colorSchemesToColor(Backend.tellYeaUsers[i]['colorSchemem']),
+        colorScheme: ColorSchemes.colorSchemesToColor(Backend.tellYeaUsers[i]['colorScheme']),
         created: Backend.tellYeaUsers[i]['created'],
         displayname: Backend.tellYeaUsers[i]['displayname'],
-        // following: , // TODO
+        following: getFollowers(i),
         imageUrl: Backend.tellYeaUsers[i]['imageUrl'],
         username: Backend.tellYeaUsers[i]['username'],
         verified: Backend.tellYeaUsers[i]['verified'],
@@ -49,11 +43,31 @@ class _FollowingPageState extends State<FollowingPage> {
     return users;
   }
 
+  List<String> getFollowers(int index) {
+    List<String> followers = new List<String>();
+
+    if (Backend.tellYeaUsers[index]['following'] == null) {
+      return followers;
+    }
+
+    if (Backend.tellYeaUsers[index]['following'].toString().length == 0) {
+      return followers;
+    }
+
+    if (Backend.tellYeaUsers[index]['following'].toString().contains(',')) {
+      followers = Backend.tellYeaUsers[index]['following'].toString().trim().split(',');
+      return followers;
+    }
+
+    followers.add(Backend.tellYeaUsers[index]['following']);
+
+    return followers;
+  }
+
   Widget followersWidget() {
     List<Widget> list = new List<Widget>();
     for (var i = followers.length - 1; 0 <= i; i--) {
-      list.add(Text("bhad"));
-      // list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
+      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
     }
     return new Column(children: list);
   }
@@ -61,8 +75,7 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget followingWidget() {
     List<Widget> list = new List<Widget>();
     for (var i = following.length - 1; 0 <= i; i--) {
-      list.add(Text("bhad"));
-      // list.add(new Text(following[i].username));
+      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
     }
     return new Column(children: list);
   }
@@ -117,6 +130,7 @@ class _FollowingPageState extends State<FollowingPage> {
                 ),
                 SizedBox(height: 40),
                 (showFollowers == true) ? followersWidget() : followingWidget(),
+                SizedBox(height: 20),
               ],
             ),
           ),
