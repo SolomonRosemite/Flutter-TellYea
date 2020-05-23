@@ -5,7 +5,7 @@ import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/pages/PostYeetPage.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/common/theme.dart';
 

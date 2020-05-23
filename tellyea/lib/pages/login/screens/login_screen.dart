@@ -1,6 +1,6 @@
 import 'package:TellYea/pages/login/utilities/constants.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

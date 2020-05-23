@@ -1,6 +1,6 @@
 import 'package:TellYea/pages/login/screens/login_screen.dart';
 import 'package:TellYea/common/theme.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/main.dart';
 
 import 'package:flutter/material.dart';

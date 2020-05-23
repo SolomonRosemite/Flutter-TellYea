@@ -5,7 +5,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
 
 import 'package:flutter/cupertino.dart';

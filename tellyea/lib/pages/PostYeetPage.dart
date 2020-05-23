@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:TellYea/model/ThisUser.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 
 class PostYeet extends StatefulWidget {
   static const String routeName = "/PostYeet";

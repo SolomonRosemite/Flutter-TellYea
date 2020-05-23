@@ -10,6 +10,7 @@ class UserModel extends Profile {
     String imageUrl,
     bool verified,
     String username,
+    String ownerId,
     List<String> following,
   }) : super.fromProfile(
           bio,
@@ -24,4 +25,5 @@ class UserModel extends Profile {
   }
 
   List<String> following;
+  String ownerId;
 }

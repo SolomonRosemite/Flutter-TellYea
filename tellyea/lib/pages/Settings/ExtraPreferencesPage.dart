@@ -1,4 +1,4 @@
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
 import 'package:flutter/material.dart';
 import 'Preferences.dart';

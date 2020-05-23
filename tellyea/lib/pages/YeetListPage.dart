@@ -5,7 +5,7 @@ import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/pages/FollowingPage.dart';
 import 'package:TellYea/pages/PostYeetPage.dart';
 import 'package:TellYea/common/YeetCard.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/model/YeetModel.dart';
 import 'package:TellYea/model/Message.dart';
 import 'package:TellYea/model/ThisUser.dart';

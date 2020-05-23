@@ -1,3 +1,4 @@
+import 'package:TellYea/common/ProfileCard.dart';
 import 'package:TellYea/model/UserModel.dart';
 import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/common/theme.dart';
@@ -17,6 +18,7 @@ class _FollowingPageState extends State<FollowingPage> {
   @override
   void initState() {
     // Demo
+    print(Backend.tellYeaUsers == null);
     followers.add(new UserModel(username: 'followers'));
     followers.add(new UserModel(username: 'followers'));
     followers.add(new UserModel(username: 'followers'));
@@ -30,9 +32,7 @@ class _FollowingPageState extends State<FollowingPage> {
 
   List<UserModel> getUsers() {
     List<UserModel> users = new List<UserModel>();
-    print('object');
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
-      print('object2');
       users.add(new UserModel(
         bio: Backend.tellYeaUsers[i]['bio'],
         colorSchemem: ColorSchemes.colorSchemesToColor(Backend.tellYeaUsers[i]['colorSchemem']),
@@ -42,6 +42,7 @@ class _FollowingPageState extends State<FollowingPage> {
         imageUrl: Backend.tellYeaUsers[i]['imageUrl'],
         username: Backend.tellYeaUsers[i]['username'],
         verified: Backend.tellYeaUsers[i]['verified'],
+        ownerId: Backend.tellYeaUsers[i]['ownerId'],
       ));
     }
 
@@ -51,7 +52,8 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget followersWidget() {
     List<Widget> list = new List<Widget>();
     for (var i = followers.length - 1; 0 <= i; i--) {
-      list.add(new Text(followers[i].username));
+      list.add(Text("bhad"));
+      // list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
     }
     return new Column(children: list);
   }
@@ -59,7 +61,8 @@ class _FollowingPageState extends State<FollowingPage> {
   Widget followingWidget() {
     List<Widget> list = new List<Widget>();
     for (var i = following.length - 1; 0 <= i; i--) {
-      list.add(new Text(following[i].username));
+      list.add(Text("bhad"));
+      // list.add(new Text(following[i].username));
     }
     return new Column(children: list);
   }

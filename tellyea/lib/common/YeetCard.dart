@@ -4,7 +4,7 @@ import 'package:TellYea/common/FadePageRoute.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/pages/ViewYeetPage.dart';
 import 'package:TellYea/model/YeetModel.dart';
-import 'package:TellYea/backend/Backend.dart';
+import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/main.dart';
 
@@ -28,7 +28,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
   @override
   void initState() {
     super.initState();
-    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel);
+    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel.ownerId);
   }
 
   @override
