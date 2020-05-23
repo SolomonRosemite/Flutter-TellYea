@@ -98,7 +98,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                 ),
                                 Spacer(flex: 98),
                                 GestureDetector(
-                                  onTapDown: (_) {
+                                  onTapUp: (_) {
                                     for (var item in Backend.tellYeaUsers) {
                                       if (item['username'] == widget.yeetModel.username) {
                                         bio = item['bio'];

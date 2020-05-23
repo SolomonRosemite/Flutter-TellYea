@@ -103,12 +103,6 @@ class ProfilePageState extends State<ProfilePage> {
                           print('test');
                         },
                       ),
-                      IconButton(
-                        icon: Icon(Icons.message),
-                        onPressed: () {
-                          print('test');
-                        },
-                      ),
                       SizedBox(width: 5),
                     ],
                   ),

@@ -40,7 +40,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   EventHandler<Map<dynamic, dynamic>> yeetListener;
   EventHandler<Map<dynamic, dynamic>> newUserListener;
   EventHandler<Map<dynamic, dynamic>> updateUserListener;
-  EventHandler<Map<dynamic, dynamic>> messageListener;
 
   List<Message> messages = new List<Message>();
 
