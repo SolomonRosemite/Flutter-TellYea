@@ -104,7 +104,24 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     Yeets.yeetModels = yeetModels;
   }
 
+  void reloadAllYeets(List<Map> list) {
+    List<Map<dynamic, dynamic>> yeets = list;
+    List<YeetModel> yeetModelsTemp = new List<YeetModel>();
+
+    yeets.sort((a, b) => DateTime.parse(b["dateTime"]).compareTo(DateTime.parse(a["dateTime"])));
+
+    for (var i = 0; i < yeets.length; i++) {
+      yeetModelsTemp.add(new YeetModel(id: i.toString(), dateTime: DateTime.parse(yeets[i]["dateTime"]), displayname: yeets[i]["displayname"], username: yeets[i]["username"], imageUrl: yeets[i]["imageUrl"], message: yeets[i]["message"], verified: yeets[i]["verified"], ownerId: yeets[i]["ownerId"]));
+      this.index = i;
+    }
+    setState(() {
+      yeetModels = yeetModelsTemp;
+      Yeets.yeetModels = yeetModelsTemp;
+    });
+  }
+
   void updateUser(Map user) {
+    print('new item: '+ user['following']);
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       if (Backend.tellYeaUsers[i]['ownerId'] == user['ownerId']) {
         Backend.tellYeaUsers[i]['bio'] = user['bio'];
@@ -131,6 +148,10 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
       }
     }
     Yeets.yeetModels = yeetModels;
+
+    if (user['ownerId'] == ThisUser.ownerId) {
+      tabController.animateTo(0);
+    }
   }
 
   @override

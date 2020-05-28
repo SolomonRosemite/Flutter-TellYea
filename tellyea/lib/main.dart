@@ -9,11 +9,17 @@ import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/SplashScreen.dart';
 import 'package:TellYea/common/theme.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 bool loadLoginScreen = false;
 
-void main() => runApp(MyApp());
+void main() {
+  loginUser();
+  runApp(new MaterialApp(
+    home: MyApp(),
+  ));
+}
 
 Future<void> loginUser() async {
   if (await Backend.hasInternet() == false) {
@@ -52,18 +58,24 @@ class MyAppState extends State<MyApp> {
       PostYeet.routeName: (BuildContext context) => new PostYeet(),
       Splash.routeName: (BuildContext context) => new Splash(),
     };
+
+    Future<void> wait() async => await Future.delayed(const Duration(milliseconds: 1), () {});
+
     return MaterialApp(
       title: 'TellYea',
-      home: FutureBuilder(
-        future: loginUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return YeetListPage();
-          } else {
-            return Container(color: ColorSchemes.primaryColor);
-          }
-        },
-      ),
+      home: kDebugMode
+          ? YeetListPage()
+          : FutureBuilder(
+              future: wait(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    return YeetListPage();
+                  default:
+                    return Container(color: ColorSchemes.primaryColor);
+                }
+              },
+            ),
       color: ColorSchemes.primaryColor,
       routes: routes,
     );
