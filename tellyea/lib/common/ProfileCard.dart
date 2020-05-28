@@ -2,7 +2,6 @@ import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/model/UserModel.dart';
 import 'package:TellYea/backend/backend.dart';
-import 'package:TellYea/common/theme.dart';
 
 import 'package:flutter/material.dart';
 

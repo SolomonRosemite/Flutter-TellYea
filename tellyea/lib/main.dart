@@ -13,12 +13,7 @@ import 'package:flutter/material.dart';
 
 bool loadLoginScreen = false;
 
-void main() {
-  loginUser();
-  runApp(new MaterialApp(
-    home: MyApp(),
-  ));
-}
+void main() => runApp(MyApp());
 
 Future<void> loginUser() async {
   if (await Backend.hasInternet() == false) {
@@ -59,7 +54,16 @@ class MyAppState extends State<MyApp> {
     };
     return MaterialApp(
       title: 'TellYea',
-      home: YeetListPage(),
+      home: FutureBuilder(
+        future: loginUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return YeetListPage();
+          } else {
+            return Container(color: ColorSchemes.primaryColor);
+          }
+        },
+      ),
       color: ColorSchemes.primaryColor,
       routes: routes,
     );

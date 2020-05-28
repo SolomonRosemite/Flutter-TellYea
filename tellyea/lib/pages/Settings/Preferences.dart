@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:TellYea/backend/backend.dart';
 import 'package:TellYea/model/ThisUser.dart';
@@ -11,6 +10,8 @@ import 'package:TellYea/model/ThisUser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+
+import 'dart:io';
 
 class Save {
   static String bio;
@@ -263,6 +264,7 @@ class _PreferencesState extends State<Preferences> {
                     'ownerId = \'${ThisUser.ownerId}\'',
                   );
 
+                  YeetListPageState.tabController.index = 0;
                   Navigator.of(context).pop();
                 }
               })

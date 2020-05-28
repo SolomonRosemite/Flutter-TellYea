@@ -1,4 +1,5 @@
 import 'package:TellYea/backend/SmallFunctions.dart';
+import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/common/FadePageRoute.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
@@ -99,6 +100,8 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                 Spacer(flex: 98),
                                 GestureDetector(
                                   onTapUp: (_) {
+                                    if (widget.yeetModel.ownerId == ThisUser.ownerId) return;
+
                                     for (var item in Backend.tellYeaUsers) {
                                       if (item['username'] == widget.yeetModel.username) {
                                         bio = item['bio'];
@@ -106,6 +109,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                         break;
                                       }
                                     }
+
                                     // Assign values to ProfilePageState.profile
                                     ProfilePageState.profile.bio = bio;
                                     ProfilePageState.profile.created = created;
