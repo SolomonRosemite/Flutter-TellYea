@@ -59,7 +59,7 @@ class MyAppState extends State<MyApp> {
       Splash.routeName: (BuildContext context) => new Splash(),
     };
 
-    Future<void> wait() async => await Future.delayed(const Duration(milliseconds: 1), () {});
+    Future<void> wait() async => await Future.delayed(const Duration(seconds: 1), () {});
 
     return MaterialApp(
       title: 'TellYea',
