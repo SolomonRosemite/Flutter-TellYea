@@ -89,6 +89,11 @@ class Backend {
 
   static Future<List<Map<dynamic, dynamic>>> readTable(String tableName, {String whereClause}) async {
     int count = await Backendless.data.of(tableName).getObjectCount();
+
+    if (count < 1) {
+      return [];
+    }
+
     DataQueryBuilder queryBuilder = DataQueryBuilder()..pageSize = count;
 
     if (whereClause == null) {

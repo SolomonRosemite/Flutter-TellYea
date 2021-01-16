@@ -45,6 +45,8 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
 
   @override
   void initState() {
+    loadYeets();
+
     tabController = new TabController(length: 3, initialIndex: 1, vsync: this);
     if (MyAppState.loadedSplashScreen == false) {
       Future.delayed(const Duration(milliseconds: 0), () {
@@ -52,8 +54,6 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         visible = true;
       });
     }
-
-    loadYeets();
 
     timeString = SmallFunctions.formatDateTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());

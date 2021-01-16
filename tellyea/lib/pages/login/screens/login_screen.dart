@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    alertUser('Something went wrong. Try restarting the App');
+    alertUser('Something went wrong. Plese try again');
 
     Backend.save('Reports', {
       'context': 'Something went wrong here. File: login_screen Method: registerUser Username: $_username Email: $_email Password: $_password'

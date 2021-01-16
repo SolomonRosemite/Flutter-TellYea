@@ -17,7 +17,7 @@ class SplashState extends State<Splash> {
   bool offlineImageVisible = false;
   bool buttonVisible = false;
 
-  String image = "images/qrcode.png";
+  String image = "images/throw.png";
   final offlineImage = "images/no_wifi.png";
 
   @override
@@ -137,6 +137,18 @@ class SplashState extends State<Splash> {
                       child: Image(
                         image: AssetImage(offlineImage),
                         color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 30),
+                      child: RaisedButton(
+                        onPressed: () {},
+                        elevation: 0,
+                        color: Colors.transparent,
+                        child: Text(
+                          "Your are offline. Please try agian later!",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
