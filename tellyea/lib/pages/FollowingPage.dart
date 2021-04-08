@@ -13,10 +13,12 @@ class FollowingPage extends StatefulWidget {
 }
 
 class _FollowingPageState extends State<FollowingPage> {
-  bool showFollowers = true;
+  Color activeColor = Colors.blue[600];
+  Color unactiveColor = Colors.blue[300];
+  bool showFollowers = false;
 
-  List<UserModel> followers = new List();
-  List<UserModel> following = new List();
+  List<UserModel> followers = [];
+  List<UserModel> following = [];
 
   @override
   void initState() {
@@ -27,8 +29,16 @@ class _FollowingPageState extends State<FollowingPage> {
     super.initState();
   }
 
+  bool showSpacer() {
+    if (showFollowers) {
+      return followers.isEmpty;
+    }
+
+    return following.isEmpty;
+  }
+
   List<UserModel> getUsers() {
-    List<UserModel> users = new List<UserModel>();
+    List<UserModel> users = [];
 
     for (var i = 0; i < Backend.tellYeaUsers.length; i++) {
       users.add(new UserModel(
@@ -48,7 +58,7 @@ class _FollowingPageState extends State<FollowingPage> {
   }
 
   List<UserModel> splitFollowers(List<UserModel> list) {
-    List<UserModel> usersList = new List();
+    List<UserModel> usersList = [];
 
     for (var i = 0; i < list.length; i++) {
       if (list[i].following == null) continue;
@@ -71,15 +81,39 @@ class _FollowingPageState extends State<FollowingPage> {
   }
 
   Widget followersWidget() {
-    List<Widget> list = new List<Widget>();
+    if (followers.length == 0) {
+      return Center(
+        child: Container(
+          child: Text(
+            "No current followers...",
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      );
+    }
+
+    List<Widget> list = [];
     for (var i = followers.length - 1; 0 <= i; i--) {
       list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
     }
-    return new Column(children: list);
+    return new Column(
+      children: list,
+    );
   }
 
   Widget followingWidget() {
-    List<Widget> list = new List<Widget>();
+    if (following.length == 0) {
+      return Center(
+        child: Container(
+          child: Text(
+            "Current not following anyone...",
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      );
+    }
+
+    List<Widget> list = [];
     for (var i = following.length - 1; 0 <= i; i--) {
       list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: following[i])));
     }
@@ -88,56 +122,92 @@ class _FollowingPageState extends State<FollowingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-          ),
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ),
+            child: Container(
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        setState(() => showFollowers = true);
-                      },
-                      child: Text(
-                        'Followers',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            setState(() => showFollowers = true);
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                // side: BorderSide(color: Colors.red),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              (showFollowers == true) ? activeColor : unactiveColor,
+                            ),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              'Followers',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17.5,
+                                fontWeight: FontWeight.bold,
+                                // decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        setState(() => showFollowers = false);
-                      },
-                      child: Text(
-                        'Following',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                        TextButton(
+                          onPressed: () {
+                            setState(() => showFollowers = false);
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                // side: BorderSide(color: Colors.red),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                              (showFollowers == true) ? unactiveColor : activeColor,
+                            ),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              'Following',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17.5,
+                                fontWeight: FontWeight.bold,
+                                // decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                    SizedBox(height: 40),
+                    showSpacer() ? Spacer() : SizedBox.shrink(),
+                    (showFollowers == true) ? followersWidget() : followingWidget(),
+                    showSpacer() ? Spacer() : SizedBox.shrink(),
+                    SizedBox(height: 40),
                   ],
                 ),
-                SizedBox(height: 40),
-                (showFollowers == true) ? followersWidget() : followingWidget(),
-                SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

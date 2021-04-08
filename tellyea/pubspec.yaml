@@ -16,6 +16,7 @@ dependencies:
   after_layout: ^1.0.7+2
   cupertino_icons: ^0.1.2
   backendless_sdk: ^1.1.7
+  flutter_phoenix: "^1.0.0"
   flutter_socket_io: ^0.6.0
   data_connection_checker: ^0.3.4
 

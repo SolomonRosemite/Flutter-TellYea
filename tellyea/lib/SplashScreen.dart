@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:TellYea/pages/login/screens/login_screen.dart';
 import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/backend/backend.dart';
@@ -40,9 +42,13 @@ class SplashState extends State<Splash> {
       return;
     }
 
+    log("message");
+    log(Backend.userLoaded.toString());
+
     Future.delayed(duration, () {
       // If the user isn't loaded yet. We wait 2 more seconds.
       if (Backend.userLoaded == false) {
+        log(loadLoginScreen.toString());
         if (loadLoginScreen == true) {
           setState(() {
             visible = false;
@@ -95,23 +101,28 @@ class SplashState extends State<Splash> {
                 duration: Duration(seconds: 3),
                 child: Column(
                   children: <Widget>[
-                    RaisedButton(
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                      ),
                       onPressed: () {},
-                      elevation: 0,
-                      color: Colors.transparent,
                       child: Text(
                         "Your Journey Starts Here",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    RaisedButton(
-                      elevation: 5.0,
-                      onPressed: () => buttonVisible ? Navigator.pop(context) : null,
-                      padding: EdgeInsets.all(15.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(5.0),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.circular(30.0),
+                        // ),
+                        backgroundColor: MaterialStateProperty.all(Colors.white),
                       ),
-                      color: Colors.white,
+                      onPressed: () => buttonVisible ? Navigator.pop(context) : null,
                       child: Text(
                         'Ready to Yeet🤾',
                         style: TextStyle(
@@ -141,10 +152,12 @@ class SplashState extends State<Splash> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 30),
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {},
-                        elevation: 0,
-                        color: Colors.transparent,
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                        ),
                         child: Text(
                           "Your are offline. Please try agian later!",
                           style: TextStyle(color: Colors.white),

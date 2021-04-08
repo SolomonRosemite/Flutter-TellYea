@@ -1,6 +1,8 @@
+import 'package:TellYea/main.dart';
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:TellYea/backend/SharedPreferences.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -163,14 +165,16 @@ class _PreferencesState extends State<Preferences> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(title: new Text(title), content: new Text(content), actions: <Widget>[
-          new FlatButton(
+          new TextButton(
             child: new Text('Go Back'),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          new FlatButton(
-              color: Colors.red,
+          new TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
               child: new Text(
                 confirmText,
                 style: TextStyle(color: Colors.white),
@@ -195,9 +199,11 @@ class _PreferencesState extends State<Preferences> {
         Container(
           width: double.infinity,
           height: height,
-          child: RaisedButton(
-            color: Colors.white,
-            elevation: 0,
+          child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              elevation: MaterialStateProperty.all(0),
+            ),
             onPressed: () => callback(),
             child: Container(
               alignment: textAlignment,
@@ -297,7 +303,7 @@ class _PreferencesState extends State<Preferences> {
               ),
             ),
             SizedBox(height: 10),
-            FlatButton(
+            TextButton(
               onPressed: () => saveImage(),
               child: Text(
                 'Change Profile Picture',
@@ -338,33 +344,41 @@ class _PreferencesState extends State<Preferences> {
                 textAlignment: Alignment.center,
                 fontSize: 15,
                 textColor: Colors.black),
-            settingsbutton(callback: () => Navigator.pushNamed(context, ExtraPreferencesPage.routeName), context: 'Edit Name and Bio', textAlignment: Alignment.center, fontSize: 15, textColor: Colors.black),
+            settingsbutton(
+              callback: () => Navigator.pushNamed(context, ExtraPreferencesPage.routeName),
+              context: 'Edit Name and Bio',
+              textAlignment: Alignment.center,
+              fontSize: 15,
+              textColor: Colors.black,
+            ),
             settingsbutton(
                 callback: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(title: new Text('Logout'), content: new Text('Are you sure you want to Logout?'), actions: <Widget>[
-                        new FlatButton(
+                        new TextButton(
                           child: new Text('Go Back'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
-                        new FlatButton(
-                            color: Colors.red,
+                        new TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.red),
+                            ),
                             child: new Text(
                               'Logout',
                               style: TextStyle(color: Colors.white),
                             ),
-                            onPressed: () {
-                              MySharedPreferences.prefs.clear();
+                            onPressed: () async {
+                              await MySharedPreferences.prefs.clear();
                               Navigator.of(context).pop();
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(title: new Text('Logout'), content: new Text('You will be Logged off after\nrestarting the App.'), actions: <Widget>[
-                                    new FlatButton(
+                                    new TextButton(
                                       child: new Text('Okay'),
                                       onPressed: () {
                                         Navigator.of(context).pop();

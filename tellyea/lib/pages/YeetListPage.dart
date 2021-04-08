@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:TellYea/pages/Settings/Preferences.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:TellYea/backend/SmallFunctions.dart';
@@ -17,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class Yeets {
-  static List<YeetModel> yeetModels = new List<YeetModel>();
+  static List<YeetModel> yeetModels = [];
 }
 
 class YeetListPage extends StatefulWidget {
@@ -26,11 +28,12 @@ class YeetListPage extends StatefulWidget {
 }
 
 class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixin {
-  List<YeetModel> yeetModels = new List<YeetModel>();
+  List<YeetModel> yeetModels = [];
   int index = 0;
 
   String timeString = "";
   bool visible = false;
+  Timer timer;
 
   static TabController tabController;
 
@@ -41,7 +44,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   EventHandler<Map<dynamic, dynamic>> newUserListener;
   EventHandler<Map<dynamic, dynamic>> updateUserListener;
 
-  List<Message> messages = new List<Message>();
+  List<Message> messages = [];
 
   @override
   void initState() {
@@ -56,8 +59,14 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
     }
 
     timeString = SmallFunctions.formatDateTime(DateTime.now());
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   void _getTime() {
@@ -143,23 +152,58 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.settings,
-                    size: 20,
-                    color: Colors.black,
-                  ),
-                  onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
-            ],
-            title: Text(
-              timeString,
-              style: TextStyle(color: Colors.black),
+            // title: Text(
+            //   timeString,
+            //   style: TextStyle(color: Colors.black),
+            // ),
+
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    icon: Icon(
+                      Icons.home,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => tabController.animateTo(1)),
+                Spacer(),
+                Text(
+                  timeString,
+                  style: TextStyle(color: Colors.black),
+                ),
+                Spacer(),
+                IconButton(
+                    icon: Icon(
+                      Icons.settings,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
+              ],
             ),
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.white,
           ),
+          // appBar: AppBar(
+          //   actions: <Widget>[
+          //     IconButton(
+          //         icon: Icon(
+          //           Icons.settings,
+          //           size: 20,
+          //           color: Colors.black,
+          //         ),
+          //         onPressed: () => Navigator.pushNamed(context, Preferences.routeName)),
+          //   ],
+          //   title: Text(
+          //     timeString,
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          //   centerTitle: true,
+          //   elevation: 0,
+          //   backgroundColor: Colors.white,
+          // ),
           body: TabBarView(
             controller: tabController,
             children: <Widget>[
@@ -175,7 +219,11 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                   itemCount: yeetModels.length,
                   padding: EdgeInsets.only(top: 20),
                   itemBuilder: (context, index) {
+                    // Backend.save("Reports", {
+                    //   "context": "index $index: " + (yeetModels[index].verified).toString()
+                    // });
                     return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
+                    // return Text("cool");
                   },
                 ),
               ),
@@ -193,11 +241,11 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
                 icon: new Icon(Icons.home),
               ),
               Tab(
-                icon: new Icon(Icons.message),
+                icon: new Icon(Icons.people),
               )
             ],
-            labelColor: Colors.red,
-            unselectedLabelColor: Colors.blue,
+            labelColor: Colors.blue[700],
+            unselectedLabelColor: Colors.blue[200],
             indicatorSize: TabBarIndicatorSize.label,
             indicatorPadding: EdgeInsets.all(5.0),
             indicatorColor: Colors.blueGrey[700],
@@ -206,7 +254,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
             onPressed: () {
               Navigator.pushNamed(context, PostYeet.routeName);
             },
-            child: Icon(Icons.message),
+            child: Icon(Icons.send),
           ),
         ),
       ),

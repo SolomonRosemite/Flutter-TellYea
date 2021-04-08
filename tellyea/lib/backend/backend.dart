@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:io';
 
 class Backend {
+  static final String imgUrl = "https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png";
   static bool initialized = false;
   static bool userLoaded = false;
   static bool userIsOffline = false;
@@ -35,6 +36,7 @@ class Backend {
         'colorScheme': 'primaryColor',
         'email': email,
         'displayname': displayName,
+        'imageUrl': imgUrl,
         'username': username
       });
       ThisUser.loadData(
@@ -43,7 +45,7 @@ class Backend {
         created: DateTime.now(),
         bio: 'Hey, I\'m using TellYea',
         displayname: displayName,
-        imageUrl: 'https://backendlessappcontent.com/${Credentials.applicationId}/${Credentials.restAPIKey}/files/images/profile_images/default.png',
+        imageUrl: imgUrl,
         following: '',
         username: username,
         verified: false,

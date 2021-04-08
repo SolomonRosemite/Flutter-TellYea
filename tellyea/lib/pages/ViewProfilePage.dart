@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  List<YeetModel> yeetModels = new List<YeetModel>();
+  List<YeetModel> yeetModels = [];
   static Profile profile = new Profile();
 
   @override
@@ -50,7 +50,7 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget heroWidgets() {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = [];
     for (var i = yeetModels.length - 1; 0 <= i; i--) {
       list.add(new Hero(tag: yeetModels[i].id, child: YeetCardWidget(yeetModel: yeetModels[i])));
     }

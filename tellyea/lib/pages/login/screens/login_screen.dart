@@ -286,14 +286,17 @@ class _LoginScreenState extends State<LoginScreen> {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 25.0),
         width: double.infinity,
-        child: RaisedButton(
-          elevation: 5.0,
-          onPressed: () => loginUser(),
-          padding: EdgeInsets.all(15.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            elevation: MaterialStateProperty.all(5.0),
+            padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.circular(30.0),
+            // ),
+            // color: Colors.white,
           ),
-          color: Colors.white,
+          onPressed: () => loginUser(),
           child: Text(
             'Login'.toUpperCase(),
             style: TextStyle(
@@ -310,14 +313,16 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () => registerUser(),
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+          elevation: MaterialStateProperty.all(5.0),
+          padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(30.0),
+          // ),
         ),
-        color: Colors.white,
+        onPressed: () => registerUser(),
         child: Text(
           'Register'.toUpperCase(),
           style: TextStyle(

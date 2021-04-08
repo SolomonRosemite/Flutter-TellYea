@@ -132,14 +132,16 @@ class _ExtraPreferencesPageState extends State<ExtraPreferencesPage> {
           title: new Text(title),
           content: new Text(content),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text('Go Back'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new FlatButton(
-                color: Colors.red,
+            new TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                ),
                 child: new Text(
                   confirmText,
                   style: TextStyle(color: Colors.white),

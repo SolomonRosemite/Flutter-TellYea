@@ -28,8 +28,13 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
 
   @override
   void initState() {
-    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel.ownerId);
     super.initState();
+    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel.ownerId);
+
+    // Backend.save("Reports", {
+    //   "user": "ownerId",
+    //   "colorScheme": colorScheme
+    // });
   }
 
   @override
@@ -79,6 +84,7 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
                                             ),
                                             SizedBox(width: 3),
                                             widget.yeetModel.verified
+                                                // true
                                                 ? Image.asset(
                                                     "images/Verified_Badge.png",
                                                     width: 12.0,

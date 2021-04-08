@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:TellYea/pages/Settings/ExtraPreferencesPage.dart';
 import 'package:TellYea/pages/login/screens/login_screen.dart';
 import 'package:TellYea/pages/Settings/Preferences.dart';

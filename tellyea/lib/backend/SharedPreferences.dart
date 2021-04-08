@@ -7,5 +7,5 @@ class MySharedPreferences {
   }
 
   static String getString(String key) => prefs.getString(key);
-  static setString(String key, String value) => prefs.setString(key, value);
+  static Future<void> setString(String key, String value) async => await prefs.setString(key, value);
 }
