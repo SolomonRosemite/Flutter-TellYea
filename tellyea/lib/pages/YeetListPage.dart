@@ -31,6 +31,7 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
   List<YeetModel> yeetModels = [];
   int index = 0;
 
+  Key key = GlobalKey();
   String timeString = "";
   bool visible = false;
   Timer timer;
@@ -161,12 +162,13 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    icon: Icon(
-                      Icons.home,
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => tabController.animateTo(1)),
+                  icon: Icon(
+                    Icons.home,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => tabController.animateTo(1),
+                ),
                 Spacer(),
                 Text(
                   timeString,
@@ -217,12 +219,13 @@ class YeetListPageState extends State<YeetListPage> with TickerProviderStateMixi
               new Container(
                 child: ListView.builder(
                   itemCount: yeetModels.length,
+                  key: key,
                   padding: EdgeInsets.only(top: 20),
                   itemBuilder: (context, index) {
                     // Backend.save("Reports", {
                     //   "context": "index $index: " + (yeetModels[index].verified).toString()
                     // });
-                    return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index]));
+                    return Hero(tag: yeetModels[index].id, child: YeetCardWidget(yeetModel: yeetModels[index], key: UniqueKey()));
                     // return Text("cool");
                   },
                 ),

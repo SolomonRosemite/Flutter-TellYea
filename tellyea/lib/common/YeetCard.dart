@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:TellYea/backend/SmallFunctions.dart';
 import 'package:TellYea/model/ThisUser.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
@@ -12,9 +14,8 @@ import 'package:TellYea/main.dart';
 import 'package:flutter/material.dart';
 
 class YeetCardWidget extends StatefulWidget {
+  YeetCardWidget({@required this.yeetModel, @required Key key}) : super(key: key);
   final YeetModel yeetModel;
-
-  YeetCardWidget({@required this.yeetModel});
 
   @override
   YeetCardWidgetState createState() => YeetCardWidgetState();
@@ -29,6 +30,9 @@ class YeetCardWidgetState extends State<YeetCardWidget> {
   @override
   void initState() {
     super.initState();
+    // if (widget.color != null) {
+    //   colorScheme = widget.color;
+    // }
     colorScheme = ColorSchemes.getColorSchemeFromUser(widget.yeetModel.ownerId);
 
     // Backend.save("Reports", {

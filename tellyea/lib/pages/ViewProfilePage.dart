@@ -52,7 +52,7 @@ class ProfilePageState extends State<ProfilePage> {
   Widget heroWidgets() {
     List<Widget> list = [];
     for (var i = yeetModels.length - 1; 0 <= i; i--) {
-      list.add(new Hero(tag: yeetModels[i].id, child: YeetCardWidget(yeetModel: yeetModels[i])));
+      list.add(new Hero(tag: yeetModels[i].id, child: YeetCardWidget(yeetModel: yeetModels[i], key: UniqueKey())));
     }
     list.insert(
         0,

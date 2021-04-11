@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:TellYea/common/theme.dart';
 import 'package:TellYea/pages/ViewProfilePage.dart';
 import 'package:TellYea/pages/YeetListPage.dart';
 import 'package:TellYea/model/UserModel.dart';
@@ -6,9 +9,8 @@ import 'package:TellYea/backend/backend.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCardWidget extends StatefulWidget {
+  ProfileCardWidget({@required this.profileModel, @required Key key}) : super(key: key);
   final UserModel profileModel;
-
-  ProfileCardWidget({@required this.profileModel});
 
   @override
   ProfileCardWidgetState createState() => ProfileCardWidgetState();
@@ -23,7 +25,8 @@ class ProfileCardWidgetState extends State<ProfileCardWidget> {
   @override
   void initState() {
     super.initState();
-    colorScheme = widget.profileModel.colorScheme;
+    colorScheme = ColorSchemes.getColorSchemeFromUser(widget.profileModel.ownerId);
+    log(widget.profileModel.displayname + ": " + colorScheme.toString());
   }
 
   void navToUser() {

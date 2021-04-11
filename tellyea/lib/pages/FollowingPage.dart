@@ -94,11 +94,9 @@ class _FollowingPageState extends State<FollowingPage> {
 
     List<Widget> list = [];
     for (var i = followers.length - 1; 0 <= i; i--) {
-      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: followers[i])));
+      list.add(Hero(tag: (i).toString(), child: ProfileCardWidget(profileModel: followers[i], key: UniqueKey())));
     }
-    return new Column(
-      children: list,
-    );
+    return new Column(children: list);
   }
 
   Widget followingWidget() {
@@ -115,7 +113,7 @@ class _FollowingPageState extends State<FollowingPage> {
 
     List<Widget> list = [];
     for (var i = following.length - 1; 0 <= i; i--) {
-      list.add(Hero(tag: i, child: ProfileCardWidget(profileModel: following[i])));
+      list.add(Hero(tag: (i * 2).toString(), child: ProfileCardWidget(profileModel: following[i], key: UniqueKey())));
     }
     return new Column(children: list);
   }

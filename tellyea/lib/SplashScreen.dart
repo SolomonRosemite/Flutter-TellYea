@@ -19,7 +19,7 @@ class SplashState extends State<Splash> {
   bool offlineImageVisible = false;
   bool buttonVisible = false;
 
-  String image = "images/throw.png";
+  String image = "images/speech-bubble.png";
   final offlineImage = "images/no_wifi.png";
 
   @override
@@ -55,7 +55,7 @@ class SplashState extends State<Splash> {
           });
           Future.delayed(const Duration(milliseconds: 510), () {
             setState(() {
-              image = "images/throw.png";
+              image = "images/speech-bubble.png";
               visible = true;
               buttonVisible = true;
             });
@@ -159,7 +159,7 @@ class SplashState extends State<Splash> {
                           backgroundColor: MaterialStateProperty.all(Colors.transparent),
                         ),
                         child: Text(
-                          "Your are offline. Please try agian later!",
+                          "You are offline. Please try agian later!",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

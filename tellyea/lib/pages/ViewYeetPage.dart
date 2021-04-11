@@ -33,7 +33,7 @@ class YeetDetailState extends State<YeetDetail> {
           SizedBox(height: 40.0),
           Hero(
             tag: widget.yeet.id,
-            child: YeetCardWidget(yeetModel: widget.yeet),
+            child: YeetCardWidget(yeetModel: widget.yeet, key: UniqueKey()),
           ),
           Spacer(),
           SizedBox(height: 80.0),
